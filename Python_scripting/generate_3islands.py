@@ -22,7 +22,9 @@ for i in range(3):
 dem = msprime.Demography.island_model([default_pop for i in range(3)], migration_rate=mig_rate)
 
 # Perform simulations
-ts = msprime.sim_ancestry(samples=sample_counts, demography=dem, sequence_length=seq_len, random_seed=1, recombination_rate=rho)
+ts = msprime.sim_ancestry(samples=sample_counts, demography=dem,
+                          sequence_length=seq_len, random_seed=1,
+                          recombination_rate=rho)
 mut = msprime.sim_mutations(ts, rate=mu, random_seed=1)
 
 # Write results to VCF
