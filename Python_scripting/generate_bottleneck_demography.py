@@ -12,7 +12,7 @@ dem.add_instantaneous_bottleneck(time=25, strength=200, population=0)
 ts = msprime.sim_ancestry(samples=5, demography=dem,
                           sequence_length=seq_len, random_seed=1,
                           recombination_rate=rho)
-mut = ts.sim_mutations(ts, mu, random_seed=1)
+mut = msprime.sim_mutations(ts, mu, random_seed=1)
 
 # Write results to VCF
 with open(out_dir + "bottleneck_model.vcf", "w") as f:
