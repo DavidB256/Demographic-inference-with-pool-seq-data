@@ -11,10 +11,10 @@ out_dir = "/scratch/djb3ve/data/"
 with open(input_vcf, "r") as vcf:
     vcf_file_name_wo_ext = input_vcf.split(".")[-2].split("/")[-1]
     with open(out_dir + vcf_file_name_wo_ext + "_popinfo.txt", "w") as out:
-        out.write("SAMPLE_NAME\tPOP_NAME\n")
+        #out.write("SAMPLE_NAME\tPOP_NAME\n")
         line = vcf.readline()
         while line:
             if line[0] != "#":
                 pos = line.split()[1]
-                out.write("i%s\tpop0\n" % (pos))
+                out.write("%s\tpop0\n" % (pos))
             line = vcf.readline()
