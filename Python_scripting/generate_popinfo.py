@@ -11,4 +11,4 @@ output_file = "/scratch/djb3ve/data/popinfo.txt"
 with open(output_file, "w") as out:
     for i in range(sample_size):
         sample_name = "tsk_" + str(i)
-        out.write("%s\tpop0" % (sample_name))
+        out.write("%s\tpop0\n" % (sample_name))
