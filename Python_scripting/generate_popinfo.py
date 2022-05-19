@@ -4,7 +4,7 @@ import sys
 if len(sys.argv) < 2:
     print("Error: One command line argument is required.")
     sys.exit()
-sample_size = sys.argv[1]
+sample_size = int(sys.argv[1])
 
 output_file = "/scratch/djb3ve/data/popinfo.txt"
 
