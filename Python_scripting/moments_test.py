@@ -1,5 +1,5 @@
 import moments
-
+print(-1)
 input_vcf = "/scratch/djb3ve/data/3islands_4mig.vcf"
 
 print(0)
