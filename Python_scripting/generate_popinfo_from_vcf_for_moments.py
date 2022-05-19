@@ -16,5 +16,5 @@ with open(input_vcf, "r") as vcf:
         while line:
             if line[0] != "#":
                 pos = line.split()[1]
-                out.write("%s\t0\n" % (pos))
+                out.write("i%s\tpop0\n" % (pos))
             line = vcf.readline()
