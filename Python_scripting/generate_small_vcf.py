@@ -1,5 +1,8 @@
 import msprime
 
+# Generates small VCF file representing a single isolated subpopulation for use
+# testing purposes
+
 # Setup
 mu = 2.9e-6
 rho = 1.25e-7
