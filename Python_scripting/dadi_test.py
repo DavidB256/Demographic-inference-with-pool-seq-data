@@ -3,7 +3,7 @@ import dadi
 print(-1)
 
 input_vcf = "/scratch/djb3ve/data/small_vcf.vcf"
-input_popinfo = "/scratch/djb3ve/data/small_vcf_popinfo.txt"
+input_popinfo = "/scratch/djb3ve/data/popinfo.txt"
 
 print(0)
 
