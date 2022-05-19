@@ -1,6 +1,8 @@
 import msprime
 import sys
 
+out_dir = "/scratch/djb3ve/data/"
+
 # Handle command line arguments
 if len(sys.argv) < 2:
     print("Error: One command line argument is required.")
@@ -29,5 +31,6 @@ ts = msprime.sim_ancestry(samples=sample_counts, demography=dem,
 mut = msprime.sim_mutations(ts, rate=mu, random_seed=1)
 
 # Write results to VCF
-with open("2island_%dmig_model.vcf" % (mig_rate_exp), "w") as f:
+with open(out_dir + "2island_%dmig_model.vcf" %
+          (mig_rate_exp), "w") as f:
     mut.write_vcf(f)
