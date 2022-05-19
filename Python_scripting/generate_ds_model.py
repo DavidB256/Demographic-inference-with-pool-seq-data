@@ -13,7 +13,7 @@ if len(sys.argv) < 2:
 mu = 2.9e-6
 rho = 1.25e-7
 seq_len = 1e6
-mig_rate = 0.1
+mig_rate = 0.001
 default_pop = 100
 out_dir = "/scratch/djb3ve/msprime/may17/"
 dim = sys.argv[1]
