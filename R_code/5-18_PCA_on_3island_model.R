@@ -4,7 +4,7 @@ require(FactoMineR)
 require(tidyverse)
 require(gridExtra)
 
-setwd("C:\\Users\\David\\Desktop\\Bergland\\R data")
+setwd("C:\\Users\\David\\Desktop\\Bergland\\data")
 
 # Load in and perform PCA on VCF files
 get_pca_coords <- function(vcf_name) {
@@ -44,10 +44,28 @@ grid.arrange(get_pca_plot(coords1) + ggtitle("migration_rate=0.1"),
              nrow=2)
 
 # Determine how clustered the subpopulations are along the dominant PCs
-coords1[,1:2]
-coords2[,1:2]
-coords3[,1:2]
-coords4[,1:2]
+get_mean_dist_from_centroid <- function(coords) {
+  coords_subpops <- sapply(0:2, function(i, coords) 
+    {coords[, c("Dim.1", "Dim.2", "pop.lab")] %>% filter(pop.lab==i)}, coords)
+  mean_dists <- apply(coords_subpops, 2, function(coords) {
+                      mean(sqrt((coords$Dim.1 - mean(coords$Dim.1))^2 + 
+                                  (coords$Dim.2 - mean(coords$Dim.2))^2))})
+  mean(mean_dists)
+}
+
+coords_vector <- list(coords1, coords2, coords3, coords4)
+mean_dists_from_centroids <- sapply(coords_vector, get_mean_dist_from_centroid)
+ggplot(data.frame(mig_rate=1:4, dists=as.vector(mean_dists_from_centroids)),
+       aes(x=mig_rate, y=dists)) +
+  geom_line() +
+  geom_point() +
+  labs(y="Mean distance from subpopulation centroid along dominant PCs",
+       x=expression(-log[10] ~ "(migration rate)"),
+       title="Mean distance of individuals from respective subpopulation centroids vs.
+migration rate in 3-island population models")
+
+
+
 
 
 
