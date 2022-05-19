@@ -1,0 +1,16 @@
+module load anaconda/2020.11-py3.8
+conda create -n myenv python=3.8 scikit-allel ipykernel -c conda-forge
+source activate myenv
+conda install msprime -c conda-forge
+
+ldconfig
+
+pip install msprime
+pip install ruamel.yaml
+
+'''
+note: This error originates from a subprocess, and is likely not a problem with pip.
+ERROR: Failed building wheel for msprime
+Failed to build msprime
+ERROR: Could not build wheels for msprime, which is required to install pyproject.toml-based projects
+'''
