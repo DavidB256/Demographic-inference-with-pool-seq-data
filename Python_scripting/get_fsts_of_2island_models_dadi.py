@@ -1,15 +1,15 @@
 import dadi
 
-vcfs = ["/scratch/djb3ve/data/2island_%dmig_model.vcf" % (i + 1)
+data_dir = "/scratch/djb3ve/data/"
+
+vcfs = ["%s2island_%dmig_model.vcf" % (data_dir, i + 1)
         for i in range(4)]
+popinfo = data_dir + "popinfo_file_for_2island_model_10n.txt"
 
-# need to generate multiple popinfo files, but they can all be identical????
+for vcf in vcfs:
+    data_dict = dadi.Misc.make_data_dict_vcf(vcf, popinfo)
+    fs = dadi.Spectrum.from_data_dict(data_dict, pop_ids=["pop0", "pop1"],
+                                      projections=[10, 10], polarized=False)
 
-input_popinfo = "/scratch/djb3ve/data/popinfo.txt"
-data_dict = dadi.Misc.make_data_dict_vcf(input_vcf, input_popinfo)
-fs = dadi.Spectrum.from_data_dict(data_dict, pop_ids=["pop0"],
-                                     projections=[5], polarized=False)
-
-pi = fs.pi()
-
-print(pi)
+    pi = fs.pi()
+    print(pi)
