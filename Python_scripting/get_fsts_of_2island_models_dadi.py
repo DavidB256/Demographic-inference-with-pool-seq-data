@@ -11,5 +11,5 @@ for vcf in vcfs:
     fs = dadi.Spectrum.from_data_dict(data_dict, pop_ids=["pop0", "pop1"],
                                       projections=[10, 10], polarized=False)
 
-    pi = fs.pi()
-    print(pi)
+    fst = fs.Fst()
+    print(fst)
