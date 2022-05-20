@@ -12,4 +12,4 @@ for vcf in vcfs:
                                       projections=[10, 10], polarized=False)
 
     fst = fs.Fst()
-    print("%s:\t%f" (vcf, fst))
+    print("%s:\t%f" % (vcf, fst))
