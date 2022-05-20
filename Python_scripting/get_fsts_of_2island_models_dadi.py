@@ -2,8 +2,8 @@ import dadi
 
 data_dir = "/scratch/djb3ve/data/"
 
-vcfs = ["%s2island_%dmig_model.vcf" % (data_dir, i + 1)
-        for i in range(4)]
+vcfs = ["%s2island_%dmig_model.vcf" % (data_dir, i)
+        for i in range(6)]
 popinfo = data_dir + "popinfo_file_for_2island_model_10n.txt"
 
 for vcf in vcfs:
