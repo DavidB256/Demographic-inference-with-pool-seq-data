@@ -32,12 +32,12 @@ def two_island_admixture(params, ns):
 print("Model function defined.")
 
 mig_rates = [i * 0.01 for i in range(25)]
-lower_bound = [100, 100, 0, 0.01]
-upper_bound = [100, 100, 0, 1]
+lower_bound = [100, 100, 2, 0.01]
+upper_bound = [100, 100, 0.01, 1]
 out_f = open(output, "w")
 
 for mig_rate in mig_rates:
-    params = [100, 100, 0, mig_rate]
+    params = [100, 100, 1, mig_rate]
     popt = moments.Inference.optimize_log(params, fs, two_island_admixture,
                                           lower_bound=lower_bound,
                                           upper_bound=upper_bound)
