@@ -8,7 +8,7 @@ iterations = int(sys.argv[1])
 # Import VCF file from prior msprime simulation and popinfo file
 vcf = "/scratch/djb3ve/data/2island_1mig_model.vcf"
 popinfo = "/scratch/djb3ve/data/popinfo_file_for_2island_model_10n.txt"
-output = "/scratch/djb3ve/Demographic-inference-with-Pool-seq-data/yuh.txt"
+output = "/scratch/djb3ve/Demographic-inference-with-Pool-seq-data/moments_fitting_2islands.txt"
 ns = [10, 10]
 
 print("Setup complete.")
