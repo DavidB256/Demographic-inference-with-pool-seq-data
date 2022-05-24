@@ -40,7 +40,7 @@ out_f.write("mig_rate\t-ll_model")
 
 for mig_rate in mig_rates:
     params = [100, 100, 100, mig_rate]
-    popt = moments.Inference.optimize(params, fs, two_island_admixture)
+    popt = moments.Inference.optimize(params, fs, two_island_admixture, pts=100)
     print(popt)
     model = two_island_admixture(popt, ns)
     ll_model = moments.Inference.ll_multinom(model, fs)
