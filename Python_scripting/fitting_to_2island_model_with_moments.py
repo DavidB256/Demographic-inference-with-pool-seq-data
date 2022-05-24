@@ -32,7 +32,7 @@ def two_island_admixture(params, ns):
 print("Model function defined.")
 
 mig_rates = [i  * 1e-2 for i in range(25)]
-lower_bound = [1 + 1e-3 for i in range(4)]
+#lower_bound = [1 + 1e-3 for i in range(4)]
 #upper_bound = [110, 110, 10, 0.5]
 
 out_f = open(output, "w")
@@ -40,8 +40,7 @@ out_f.write("mig_rate\t-ll_model")
 
 for mig_rate in mig_rates:
     params = [100, 100, 100, mig_rate]
-    popt = moments.Inference.optimize_log(params, fs, two_island_admixture,
-                                          lower_bound=lower_bound)
+    popt = moments.Inference.optimize_log(params, fs, two_island_admixture)
     print(popt)
     model = two_island_admixture(popt, ns)
     #ll_model = moments.Inference.ll_multinom(model, fs)
