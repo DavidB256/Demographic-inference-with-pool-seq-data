@@ -24,6 +24,7 @@ print("VCF converted to SFS.")
 
 def two_island_admixture(params, ns):
     nu1, nu2, T = params
+    mig_rate = 0.1
 
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
