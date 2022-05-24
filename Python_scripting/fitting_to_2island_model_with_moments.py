@@ -6,7 +6,7 @@ import numpy as np
 vcf = "/scratch/djb3ve/data/2island_1mig_model.vcf"
 popinfo = "/scratch/djb3ve/data/popinfo_file_for_2island_model_10n.txt"
 output = "/scratch/djb3ve/Demographic-inference-with-Pool-seq-data/yuh.txt"
-ns = [5, 5]
+ns = [10, 10]
 
 print("Setup complete.")
 
@@ -31,7 +31,7 @@ def two_island_admixture(params, ns):
 
 print("Model function defined.")
 
-mig_rates = [(i + 11) for i in range(25)]
+mig_rates = [(i + 1 + 1e-3) for i in range(25)]
 lower_bound = [1 + 1e-3 for i in range(4)]
 #upper_bound = [110, 110, 10, 0.5]
 
