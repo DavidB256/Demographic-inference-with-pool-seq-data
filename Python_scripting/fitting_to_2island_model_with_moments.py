@@ -1,6 +1,9 @@
 import moments
 import dadi
 import numpy as np
+import sys
+
+iterations = int(sys.argv[1])
 
 # Import VCF file from prior msprime simulation and popinfo file
 vcf = "/scratch/djb3ve/data/2island_1mig_model.vcf"
@@ -31,25 +34,25 @@ def two_island_admixture(params, ns):
 
 print("Model function defined.")
 
-mig_rates = [i  * 1e-2 for i in range(25)]
-lower_bound = [1e-3 for i in range(4)]
+lower_bound = [1e-4 for i in range(4)]
 upper_bound = [1000, 1000, 100, 1]
 
 out_f = open(output, "w")
 out_f.write("mig_rate\t-ll_model")
 
-for mig_rate in mig_rates:
-    params = [2, 2, 5, mig_rate]
-    print(params)
+for i in iterations:
+    params = [np.random.uniform(lower_bound[j], upper_bound[j])
+              for j in range(4)]
     popt = moments.Inference.optimize_log(params, fs, two_island_admixture,
                                           lower_bound=lower_bound,
                                           upper_bound=upper_bound)
-    print(popt)
-    print()
     model = two_island_admixture(popt, ns)
     ll_model = moments.Inference.ll_multinom(model, fs)
 
-    print("%f\t%f" % (mig_rate, ll_model))
-    #out_f.write("%f\t%f" % (round(mig_rate, 2), round(ll_model, 2)))
+    output_string = "%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t" %
+                    (params[0], params[1], params[2], params[3],
+                     popt[0], popt[1], popt[2], popt[3], ll_model)
+    print(output_string)
+    out_f.write(output_string + "\n")
 
 out_f.close()
