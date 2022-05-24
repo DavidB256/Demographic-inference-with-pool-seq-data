@@ -43,10 +43,11 @@ for mig_rate in mig_rates:
     popt = moments.Inference.optimize_log(params, fs, two_island_admixture,
                                           lower_bound=lower_bound,
                                           upper_bound=upper_bound)
+    print(popt)
     model = two_island_admixture(popt, ns)
     ll_model = moments.Inference.ll(model, fs)
 
     print("%f\t%f" % (mig_rate, ll_model))
-    out_f.write("%f\t%f" % (mig_rate, ll_model))
+    out_f.write("%f\t%f" % (round(mig_rate, 2), round(ll_model, 2)))
 
 out_f.close()
