@@ -21,7 +21,7 @@ print("VCF converted to SFS.")
 
 def two_island_admixture(params, ns):
     nu1, nu2, T, m = params
-    xx = moments.Numerics.default_grid(pts)
+    xx = dadi.Numerics.default_grid(pts)
 
     phi = moments.PhiManip.phi_1D(xx)
     phi = moments.PhiManip.phi_1D_to_2D(xx, phi)
