@@ -33,7 +33,7 @@ print("Model function defined.")
 
 mig_rates = [i * 0.01 for i in range(25)]
 lower_bound = [100, 100, 1e-3, 1e-3]
-upper_bound = [100, 100, 10, 0.5]
+upper_bound = [110, 110, 10, 0.5]
 
 out_f = open(output, "w")
 out_f.write("mig_rate\t-ll_model")
