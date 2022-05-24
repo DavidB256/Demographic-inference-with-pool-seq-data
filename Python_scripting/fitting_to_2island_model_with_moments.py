@@ -23,7 +23,7 @@ fs = dadi.Spectrum.from_data_dict(data_dict, pop_ids=["pop0", "pop1"],
 print("VCF converted to SFS.")
 
 def two_island_admixture(params, ns):
-    nu1, nu2, T, mig_rate = params
+    nu1, nu2, T = params
 
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
     fs = moments.Spectrum(sts)
@@ -34,23 +34,23 @@ def two_island_admixture(params, ns):
 
 print("Model function defined.")
 
-lower_bound = [1e-3, 1e-3, 1e-3, 0.1]
-upper_bound = [1000, 1000, 100, 0.1]
+lower_bound = [1e-3, 1e-3, 1e-3]
+upper_bound = [1000, 1000, 100]
 
 out_f = open(output, "w")
 
 for i in range(iterations):
     params = [np.random.uniform(lower_bound[j], upper_bound[j])
-              for j in range(4)]
+              for j in range(3)]
     popt = moments.Inference.optimize_log(params, fs, two_island_admixture,
                                           lower_bound=lower_bound,
                                           upper_bound=upper_bound)
     model = two_island_admixture(popt, ns)
     ll_model = moments.Inference.ll_multinom(model, fs)
 
-    output_string = "%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n" % \
-                    (params[0], params[1], params[2], params[3],
-                     popt[0], popt[1], popt[2], popt[3], ll_model)
+    output_string = "%f\t%f\t%f\t%f\t%f\t%f\t%f\n" % \
+                    (params[0], params[1], params[2],
+                     popt[0], popt[1], popt[2], ll_model)
     print(output_string, end="")
     out_f.write(output_string)
 
