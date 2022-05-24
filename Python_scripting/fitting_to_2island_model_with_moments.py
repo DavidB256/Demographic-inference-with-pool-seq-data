@@ -43,6 +43,9 @@ for mig_rate in mig_rates:
     popt = moments.Inference.optimize_log(params, fs, two_island_admixture,
                                           lower_bound=lower_bound,
                                           upper_bound=upper_bound)
+    print(moments.Inference.optimize_log(params, fs, two_island_admixture,
+                                          lower_bound=lower_bound,
+                                          upper_bound=upper_bound))
     print(popt)
     print(params)
     print()
