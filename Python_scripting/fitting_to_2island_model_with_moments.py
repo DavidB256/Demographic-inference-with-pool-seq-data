@@ -34,8 +34,8 @@ def two_island_admixture(params, ns):
 
 print("Model function defined.")
 
-lower_bound = [1e-3 for i in range(4)]
-upper_bound = [1000, 1000, 100, 1]
+lower_bound = [1e-3, 1e-3, 1e-3, 0.1]
+upper_bound = [1000, 1000, 100, 0.1]
 
 out_f = open(output, "w")
 
@@ -48,10 +48,10 @@ for i in range(iterations):
     model = two_island_admixture(popt, ns)
     ll_model = moments.Inference.ll_multinom(model, fs)
 
-    output_string = "%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f" % \
+    output_string = "%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n" % \
                     (params[0], params[1], params[2], params[3],
                      popt[0], popt[1], popt[2], popt[3], ll_model)
-    print(output_string)
-    out_f.write(output_string + "\n")
+    print(output_string, end="")
+    out_f.write(output_string)
 
 out_f.close()
