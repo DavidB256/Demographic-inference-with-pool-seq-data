@@ -4,7 +4,7 @@ import dadi
 # Import VCF file from prior msprime simulation and popinfo file
 vcf = "/scratch/djb3ve/data/2island_1mig_model.vcf"
 popinfo = "/scratch/djb3ve/data/popinfo_file_for_2island_model_10n.txt"
-output = "/scratch/djb3ve/yuh.txt"
+output = "/scratch/djb3ve/Demographic-inference-with-Pool-seq-data/yuh.txt"
 pts = 100
 ns = [10, 10]
 
@@ -15,7 +15,7 @@ data_dict = dadi.Misc.make_data_dict_vcf(vcf, popinfo)
 print("VCF imported.")
 
 fs = dadi.Spectrum.from_data_dict(data_dict, pop_ids=["pop0", "pop1"],
-                                     projections=[5], polarized=False)
+                                     projections=[5, 5], polarized=False)
 
 print("VCF converted to SFS.")
 
