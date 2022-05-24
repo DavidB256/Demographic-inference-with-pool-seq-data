@@ -49,7 +49,7 @@ for i in iterations:
     model = two_island_admixture(popt, ns)
     ll_model = moments.Inference.ll_multinom(model, fs)
 
-    output_string = "%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t" %
+    output_string = "%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f" % \
                     (params[0], params[1], params[2], params[3],
                      popt[0], popt[1], popt[2], popt[3], ll_model)
     print(output_string)
