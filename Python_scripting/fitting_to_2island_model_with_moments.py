@@ -32,8 +32,8 @@ def two_island_admixture(params, ns):
 print("Model function defined.")
 
 mig_rates = [i * 0.01 for i in range(25)]
-lower_bound = [100, 100, 2, 0.01]
-upper_bound = [100, 100, 0.01, 1]
+lower_bound = [100, 100, 0.01, 0.01]
+upper_bound = [100, 100, 2, 1]
 out_f = open(output, "w")
 
 for mig_rate in mig_rates:
@@ -45,6 +45,6 @@ for mig_rate in mig_rates:
     ll_model = moments.Inference.ll_multinom(model, fs)
 
     print("%f\t%f" % (mig_rate, ll_model))
-    out_f.write(print("%f\t%f" % (mig_rate, ll_model)))
+    out_f.write("%f\t%f" % (mig_rate, ll_model))
 
 out_f.close()
