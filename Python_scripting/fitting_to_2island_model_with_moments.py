@@ -37,7 +37,7 @@ out_f = open(output, "w")
 
 for mig_rate in mig_rates:
     params = [100, 100, 0, mig_rate]
-    popt = moments.Inference.optimize_log(params, fs, two_island_admixture, pts)
+    popt = moments.Inference.optimize_log(params, fs, two_island_admixture, [pts, pts])
     model = two_island_admixture(popt, ns, pts)
 
     ll_model = moments.Inference.ll(model, fs)
