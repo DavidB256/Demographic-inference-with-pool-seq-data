@@ -40,7 +40,7 @@ for mig_rate in mig_rates:
     popt = dadi.Inference.optimize_log(params, fs, two_island_admixture, pts)
     model = two_island_admixture(popt, ns, pts)
 
-    ll_model = dadi.Inference.ll_multinom(model, fs)
+    ll_model = moments.Inference.ll_multinom(model, fs)
     print("%f\t%f" % (mig_rate, ll_model))
     out_f.write(print("%f\t%f" % (mig_rate, ll_model)))
 
