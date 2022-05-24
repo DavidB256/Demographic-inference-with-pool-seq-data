@@ -44,6 +44,8 @@ for mig_rate in mig_rates:
                                           lower_bound=lower_bound,
                                           upper_bound=upper_bound)
     print(popt)
+    print(params)
+    print()
     model = two_island_admixture(popt, ns)
     #ll_model = moments.Inference.ll_multinom(model, fs)
 
