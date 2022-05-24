@@ -40,7 +40,7 @@ upper_bound = [1000, 1000, 100, 1]
 out_f = open(output, "w")
 out_f.write("mig_rate\t-ll_model")
 
-for i in iterations:
+for i in range(iterations):
     params = [np.random.uniform(lower_bound[j], upper_bound[j])
               for j in range(4)]
     popt = moments.Inference.optimize_log(params, fs, two_island_admixture,
