@@ -34,11 +34,10 @@ def two_island_admixture(params, ns):
 
 print("Model function defined.")
 
-lower_bound = [1e-4 for i in range(4)]
+lower_bound = [1e-3 for i in range(4)]
 upper_bound = [1000, 1000, 100, 1]
 
 out_f = open(output, "w")
-out_f.write("mig_rate\t-ll_model")
 
 for i in range(iterations):
     params = [np.random.uniform(lower_bound[j], upper_bound[j])
