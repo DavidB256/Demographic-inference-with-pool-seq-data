@@ -31,7 +31,7 @@ def two_island_admixture(params, ns):
 
 print("Model function defined.")
 
-mig_rates = [i * 0.01 for i in range(50)]
+mig_rates = [i * 0.01 for i in range(101)]
 lower_bound = [100, 100, 1, 0.01]
 upper_bound = [100, 100, 1, 1]
 out_f = open(output, "w")
