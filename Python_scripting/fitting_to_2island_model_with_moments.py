@@ -2,9 +2,9 @@ import moments
 import dadi
 
 # Import VCF file from prior msprime simulation and popinfo file
-vcf = "/scratch/djb3ve/data/small_vcf.vcf"
-popinfo = "/scratch/djb3ve/data/popinfo.txt"
-output = "/scratch/djb3ve/"
+vcf = "/scratch/djb3ve/data/2island_1mig_model.vcf.vcf"
+popinfo = "/scratch/djb3ve/data/popinfo_file_for_2island_model_10n.txt"
+output = "/scratch/djb3ve/yuh.txt"
 pts = 100
 ns = [10, 10]
 
@@ -37,5 +37,6 @@ for mig_rate in mig_rates:
 
     ll_model = moments.Inference.ll_multinom(model, fs)
     print("%f\t%f" % (mig_rate, ll_model))
+    out_f.write(print("%f\t%f" % (mig_rate, ll_model)))
 
 out_f.close()
