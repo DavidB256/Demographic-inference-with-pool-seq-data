@@ -19,7 +19,7 @@ fs = dadi.Spectrum.from_data_dict(data_dict, pop_ids=["pop0", "pop1"],
 
 print("VCF converted to SFS.")
 
-def two_island_admixture(params, ns):
+def two_island_admixture(params, ns, pts):
     nu1, nu2, T, m = params
     xx = dadi.Numerics.default_grid(pts)
 
@@ -37,7 +37,7 @@ out_f = open(output, "w")
 
 for mig_rate in mig_rates:
     params = [100, 100, 0, mig_rate]
-    popt = dadi.Inference.optimize_log(params, fs, two_island_admixture, pts=pts)
+    popt = dadi.Inference.optimize_log(params, fs, two_island_admixture, pts)
     model = two_island_admixture(popt, ns)
 
     ll_model = dadi.Inference.ll_multinom(model, fs)
