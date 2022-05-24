@@ -23,10 +23,10 @@ def two_island_admixture(params, ns):
     nu1, nu2, T, m = params
     xx = dadi.Numerics.default_grid(pts)
 
-    phi = moments.PhiManip.phi_1D(xx)
-    phi = moments.PhiManip.phi_1D_to_2D(xx, phi)
-    phi = moments.Integration.two_pops(phi, xx, T, nu1, nu2, m12=m, m21=m)
-    fs = moments.Spectrum.from_phi(phi, ns, (xx, xx))
+    phi = dadi.PhiManip.phi_1D(xx)
+    phi = dadi.PhiManip.phi_1D_to_2D(xx, phi)
+    phi = dadi.Integration.two_pops(phi, xx, T, nu1, nu2, m12=m, m21=m)
+    fs = dadi.Spectrum.from_phi(phi, ns, (xx, xx))
 
     return fs
 
@@ -37,10 +37,10 @@ out_f = open(output, "w")
 
 for mig_rate in mig_rates:
     params = [100, 100, 0, mig_rate]
-    popt = moments.Inference.optimize_log(params, fs, two_island_admixture, [pts, pts])
+    popt = dadi.Inference.optimize_log(params, fs, two_island_admixture, [pts, pts])
     model = two_island_admixture(popt, ns)
 
-    ll_model = moments.Inference.ll_multinom(model, fs)
+    ll_model = dadi.Inference.ll_multinom(model, fs)
     print("%f\t%f" % (mig_rate, ll_model))
     out_f.write(print("%f\t%f" % (mig_rate, ll_model)))
 
