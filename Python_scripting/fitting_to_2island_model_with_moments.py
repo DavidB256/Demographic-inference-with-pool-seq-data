@@ -1,5 +1,6 @@
 import moments
 import dadi
+import numpy as np
 
 # Import VCF file from prior msprime simulation and popinfo file
 vcf = "/scratch/djb3ve/data/2island_1mig_model.vcf"
