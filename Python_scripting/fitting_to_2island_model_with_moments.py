@@ -37,10 +37,10 @@ out_f = open(output, "w")
 
 for mig_rate in mig_rates:
     params = [100, 100, 0, mig_rate]
-    popt = dadi.Inference.optimize_log(params, fs, two_island_admixture, pts)
+    popt = moments.Inference.optimize_log(params, fs, two_island_admixture, pts)
     model = two_island_admixture(popt, ns, pts)
 
-    ll_model = dadi.Inference.ll(model, fs)
+    ll_model = moments.Inference.ll(model, fs)
     print("%f\t%f" % (mig_rate, ll_model))
     out_f.write(print("%f\t%f" % (mig_rate, ll_model)))
 
