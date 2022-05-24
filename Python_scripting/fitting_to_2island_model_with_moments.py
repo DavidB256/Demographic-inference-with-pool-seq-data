@@ -8,10 +8,15 @@ output = "/scratch/djb3ve/yuh.txt"
 pts = 100
 ns = [10, 10]
 
-data_dict = dadi.make_data_dict_vcf(vcf, popinfo)
+print("Setup complete.")
+
+data_dict = dadi.Misc.make_data_dict_vcf(vcf, popinfo)
+
 print("VCF imported.")
+
 fs = dadi.Spectrum.from_data_dict(data_dict, pop_ids=["pop0", "pop1"],
                                      projections=[5], polarized=False)
+
 print("VCF converted to SFS.")
 
 def two_island_admixture(params, ns):
