@@ -46,7 +46,7 @@ for mig_rate in mig_rates:
     model = two_island_admixture(popt, ns)
     ll_model = moments.Inference.ll_multinom(model, fs)
 
-    print("%f\t%d\t%f" % (mig_rate, model.sample_sizes ll_model))
+    print("%f\t%d\t%f" % (mig_rate, model.sample_sizes, ll_model))
     out_f.write("%f\t%f" % (mig_rate, ll_model))
 
 out_f.close()
