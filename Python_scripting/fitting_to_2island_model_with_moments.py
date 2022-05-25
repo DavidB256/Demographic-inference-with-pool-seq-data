@@ -9,7 +9,7 @@ iterations = int(sys.argv[1])
 vcf = "/scratch/djb3ve/data/2island_1mig_model.vcf"
 popinfo = "/scratch/djb3ve/data/popinfo_file_for_2island_model_10n.txt"
 output = "/scratch/djb3ve/Demographic-inference-with-Pool-seq-data/moments_fitting_2islands.txt"
-ns = [10, 10]
+ns = [5, 5]
 
 print("Setup complete.")
 
@@ -18,7 +18,7 @@ data_dict = dadi.Misc.make_data_dict_vcf(vcf, popinfo)
 print("VCF imported.")
 
 fs = dadi.Spectrum.from_data_dict(data_dict, pop_ids=["pop0", "pop1"],
-                                     projections=[10, 10], polarized=False)
+                                     projections=ns, polarized=False)
 
 print("VCF converted to SFS.")
 
