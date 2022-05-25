@@ -54,7 +54,7 @@ for i in range(iterations):
     ll_model = moments.Inference.ll_multinom(model, fs)
     theta = moments.Inference.optimal_sfs_scaling(model, fs)
     # Print to stdout and "output" file
-    output_string = "%f\t%f\t%f\t%f\t%f\n" % (params[0], popt[0], theta, popt[0]*theta ll_model)
+    output_string = "%f\t%f\t%f\t%f\t%f\n" % (params[0], popt[0], theta, popt[0]*theta, ll_model)
     print(output_string, end="")
     out_f.write(output_string)
 
