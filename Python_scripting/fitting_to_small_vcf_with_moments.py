@@ -4,6 +4,7 @@ import numpy as np
 import sys
 
 iterations = int(sys.argv[1])
+Ts = int(sys.argv[2])
 
 # Import VCF file from prior msprime simulation and popinfo file
 vcf = "/scratch/djb3ve/data/small_vcf.vcf"
@@ -27,7 +28,7 @@ def isolated_island(params, ns):
     nu1 = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0])
     fs = moments.Spectrum(sts)
-    fs.integrate([nu1], 1)
+    fs.integrate([nu1], Ts)
     return fs
 
 print("Model function defined.")
