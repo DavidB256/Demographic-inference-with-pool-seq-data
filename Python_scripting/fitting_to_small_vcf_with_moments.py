@@ -37,8 +37,8 @@ upper_bound = [1000]
 
 out_f = open(output, "w")
 header_string = "nu1_initial\tnu1_optimized\ttheta\t\nu1_optimized*theta\tlog-likelihood\n"
-print("nu1_initial\tnu1_optimized\ttheta\tlog-likelihood\n", end="")
-out_f.write("nu1_initial\tnu1_optimized\ttheta\tlog-likelihood\n")
+print(header_string, end="")
+out_f.write(header_string)
 
 # Fit "iterations" many models with parameters that are randomly generated then
 # improved with "optimize_log"
