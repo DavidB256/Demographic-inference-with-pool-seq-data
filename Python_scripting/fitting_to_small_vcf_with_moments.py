@@ -26,7 +26,7 @@ def isolated_island(params, ns):
     nu1 = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0])
     fs = moments.Spectrum(sts)
-    fs.integrate([nu1], 1)
+    fs.integrate([nu1], 1000)
     return fs
 
 print("Model function defined.")
