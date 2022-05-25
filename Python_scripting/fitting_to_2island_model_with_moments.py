@@ -35,8 +35,8 @@ def two_island_admixture(params, ns):
 
 print("Model function defined.")
 
-lower_bound = [100, 100, 100000]
-upper_bound = [100, 100, 100000]
+lower_bound = [100, 100, 1]
+upper_bound = [100, 100, 1]
 
 out_f = open(output, "w")
 
