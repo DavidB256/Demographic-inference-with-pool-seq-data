@@ -26,7 +26,7 @@ def isolated_island(params, ns):
     nu1 = params
     sts = moments.LinearSystem_1D.steady_state_1D(ns[0])
     fs = moments.Spectrum(sts)
-    fs.integrate([nu1], 1000)
+    fs.integrate([nu1], 100000)
     return fs
 
 print("Model function defined.")
@@ -41,8 +41,7 @@ for i in range(iterations):
               for j in range(1)]
     popt = moments.Inference.optimize_log(params, fs, isolated_island,
                                           lower_bound=lower_bound,
-                                          upper_bound=upper_bound,
-                                          verbose=10)
+                                          upper_bound=upper_bound)
     model = isolated_island(popt, ns)
     ll_model = moments.Inference.ll_multinom(model, fs)
 
