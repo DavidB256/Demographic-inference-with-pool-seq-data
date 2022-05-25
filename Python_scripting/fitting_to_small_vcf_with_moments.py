@@ -37,7 +37,7 @@ lower_bound = [1e-3]
 upper_bound = [1000]
 
 out_f = open(output, "w")
-header_string = "nu1_initial\tnu1_optimized\ttheta\t\nu1_optimized*theta\tlog-likelihood\n"
+header_string = "nu1_initial\tnu1_optimized\ttheta\tnu1_optimized*theta\tlog-likelihood\n"
 print(header_string, end="")
 out_f.write(header_string)
 
