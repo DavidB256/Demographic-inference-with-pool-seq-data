@@ -36,6 +36,8 @@ lower_bound = [1e-3]
 upper_bound = [1000]
 
 out_f = open(output, "w")
+header_string = "nu1_initial\tnu1_optimized\ttheta\t\nu1_optimized*theta\tlog-likelihood\n"
+print("nu1_initial\tnu1_optimized\ttheta\tlog-likelihood\n", end="")
 out_f.write("nu1_initial\tnu1_optimized\ttheta\tlog-likelihood\n")
 
 # Fit "iterations" many models with parameters that are randomly generated then
@@ -52,7 +54,7 @@ for i in range(iterations):
     ll_model = moments.Inference.ll_multinom(model, fs)
     theta = moments.Inference.optimal_sfs_scaling(model, fs)
     # Print to stdout and "output" file
-    output_string = "%f\t%f\t%f\t%f\n" % (params[0], popt[0], theta, ll_model)
+    output_string = "%f\t%f\t%f\t%f\t%f\n" % (params[0], popt[0], theta, popt[0]*theta ll_model)
     print(output_string, end="")
     out_f.write(output_string)
 
