@@ -1,14 +1,23 @@
-install.packages("C:/Users/David/Documents/poolSeq-0.3.5.tar.gz", repos=NULL, type="source")
-
 library(poolSeq)
-library(genomalicious)
+library(vcfR)
+library(stringr)
 
-# generate random allele frequencies
-af <- runif(10000)
+setwd("C:/Users/David/Desktop/Bergland/data")
 
-# introduce sampling variance to mimic Pool-seq of the entire population at 100X coverage
-afSeq <- sample.alleles(af, size=100, mode="coverage")
+get_pooled_allele_counts <- function(vcf_name, poolSeq_coverage, poolSeq_mode) {
+  vcf <- read.vcfR(vcf_name)
+  vcf_genind <- vcfR2genind(vcf)
+  vcf_table <- as.data.frame(vcf_genind@tab)
+  polarized_vcf_table <- vcf_table[ ,which(sapply(names(vcf_table),
+                                                  str_sub, -1, -1) == "1")]
+  allele_freqs <- apply(polarized_vcf_table, 2, sum) / 10
+  pooled_allele_freqs <- sample.alleles(allele_freqs, 
+                                        size=poolSeq_coverage, 
+                                        mode=poolSeq_mode)
+  pooled_allele_counts <- pooled_allele_freqs$p.smpld * pooled_allele_freqs$size
+  pooled_allele_counts
+}
 
-# plot distribution of differences in allele frequency before and after sampling
-hist(af-afSeq$p.smpld, main="Sequencing at 100X", xlab="Error in allele frequency (%)", ylab="Occurrences")
-head(afSeq)
+get_pooled_allele_counts("small_vcf.vcf", 100, "coverage")
+
+
