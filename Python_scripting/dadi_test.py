@@ -11,4 +11,5 @@ fs = dadi.Spectrum.from_data_dict(data_dict, pop_ids=["pop0"],
 
 # Calculate and print pi
 pi = fs.pi()
+print(fs)
 print(pi)
