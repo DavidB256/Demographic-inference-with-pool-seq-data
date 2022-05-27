@@ -2,7 +2,7 @@ import dadi
 
 # Setup
 input_vcf = "/scratch/djb3ve/data/small_vcf.vcf"
-input_popinfo = "/scratch/djb3ve/data/popinfo.txt"
+input_popinfo = "/scratch/djb3ve/data/popinfo_for_small_vcf.txt"
 
 # Load VCF and popinfo file into "data_dict" in order to make SFS "fs"
 data_dict = dadi.Misc.make_data_dict_vcf(input_vcf, input_popinfo)
