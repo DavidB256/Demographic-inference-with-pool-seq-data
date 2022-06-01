@@ -31,3 +31,5 @@ sample.alleles <- function(p, size, mode=c("coverage", "individuals"), Ncensus=N
                   rhyper(nn=maxlen, m=p*Ncensus*ploidy, n=(1-p)*Ncensus*ploidy, k=size[1]*ploidy)/(size[1]*ploidy)
                 }))
 }
+
+
