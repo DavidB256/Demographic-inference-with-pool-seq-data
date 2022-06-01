@@ -43,13 +43,17 @@ get_pooled_folded_fs <- function(vcf_name, poolSeq_coverage, popinfo,
   fs
 }
 
-vcf_name <- "3island_small_model.vcf"
-coverage <- 10
 # "popinfo" codes which sample comes from which population. If the ith element
 # of "popinfo" is n, then the ith sample is included in the nth population.
 # "popinfo" must be 0-indexed and should not skip any numbers
+
+vcf_name <- "2island_1mig_model.vcf"
+popinfo <- rep(0:1, each=10)
+haploid_counts <- c(20, 20)
+vcf_name <- "3island_small_model.vcf"
 popinfo <- rep(0:2, each=2)
 haploid_counts <- c(4, 4, 4)
+coverage <- 10
 debug(get_pooled_folded_fs)
 undebug(get_pooled_folded_fs)
 fs <- get_pooled_folded_fs(vcf_name, coverage, popinfo, haploid_counts)
