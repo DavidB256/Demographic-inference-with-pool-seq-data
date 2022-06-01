@@ -8,11 +8,11 @@ with open(input_fs, "r") as f_fs:
     values = []
     line = f_fs.readline()
     while line != "-----":
-        dims.append[int(line)]
+        dims.append(int(line))
         line = f_fs.readline()
     f_fs.readline()
     while line:
-        values.append[int(line)]
+        values.append(int(line))
         line = f_fs.readline()
 
 arr = np.array(values).reshape(dims)
