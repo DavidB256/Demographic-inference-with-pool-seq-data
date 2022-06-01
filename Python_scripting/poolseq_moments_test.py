@@ -7,11 +7,11 @@ with open(input_fs, "r") as f_fs:
     dims = []
     values = []
     line = f_fs.readline()
-    while line != "-----":
+    while line != "-----\n":
         print(line[:-1])
         dims.append(int(line[:-1]))
         line = f_fs.readline()
-    f_fs.readline()
+    line = f_fs.readline()
     while line:
         values.append(int(line[:-1]))
         line = f_fs.readline()
