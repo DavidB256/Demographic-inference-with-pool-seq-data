@@ -8,6 +8,7 @@ with open(input_fs, "r") as f_fs:
     values = []
     line = f_fs.readline()
     while line != "-----":
+        print(line[:-2])
         dims.append(int(line[:-2]))
         line = f_fs.readline()
     f_fs.readline()
