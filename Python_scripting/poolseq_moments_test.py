@@ -16,3 +16,4 @@ with open(input_fs, "r") as f_fs:
         line = f_fs.readline()
 
 arr = np.transpose(np.array(values).reshape(dims))
+print(arr)
