@@ -1,7 +1,8 @@
 import msprime
 import numpy as np
+import sys
 
-input_fs = "/scratch/djb3ve/data/test_poolseq_sfs.txt"
+input_fs = "/scratch/djb3ve/data/" + sys.argv[1]
 
 with open(input_fs, "r") as f_fs:
     dims = []
