@@ -1,0 +1,71 @@
+library(poolSeq)
+library(vcfR)
+library(stringr)
+
+#setwd("C:/Users/David/Desktop/Bergland/data")
+setwd("/scratch/djb3ve/data")
+
+get_pooled_folded_fs <- function(vcf_name, poolSeq_coverage, popinfo, 
+                                 haploid_counts) {
+  num_of_pops <- length(haploid_counts)
+  # Import VCF file "vcf_name" as "vcf_table"
+  vcf <- read.vcfR(vcf_name, verbose=FALSE)
+  vcf_genind <- vcfR2genind(vcf)
+  vcf_table <- as.data.frame(vcf_genind@tab)
+  # Polarize "vcf_table" to remove repeat columns
+  polarized_vcf_table <- vcf_table[ , which(sapply(names(vcf_table),
+                                                  str_sub, -1, -1) == "1")]
+  # Subdivide VCF file by population
+  populations <- lapply(0:max(popinfo), 
+                        function(i) 
+                          { polarized_vcf_table[which(popinfo==i),] })
+  allele_counts <- lapply(1:num_of_pops,
+                          function(i) {apply(populations[[i]], 2, sum) })
+  allele_counts <- lapply(1:num_of_pops,
+                          function(i) {sapply(allele_counts[[i]], function(j) 
+                                         { min(j, haploid_counts[i] - j) } ) })
+  # Apply noise in order to emulate the effects of Pool-seq
+  allele_freqs <- lapply(1:num_of_pops, 
+                         function(i) { allele_counts[[i]] / haploid_counts[i] } )
+  pooled_allele_freqs <- lapply(allele_freqs, 
+                                function(x) 
+                                  {sample.alleles(x, 
+                                                  size=poolSeq_coverage, 
+                                                  mode="coverage") } )
+  pooled_allele_counts <- lapply(1:num_of_pops,
+                                 function(i) 
+                                   { round(pooled_allele_freqs[[i]]$p.smpld * haploid_counts[i]) } )
+  # Assemble site frequence spectrum
+  fs <- array(0, sapply(haploid_counts, function(i) {i + 1}))
+  for (i in 1:length(pooled_allele_counts[[1]])) {
+    coord <- sapply(pooled_allele_counts, function(x) { x[i] })
+    fs[rbind(coord)] <- fs[rbind(coord)] + 1
+  }
+  fs
+}
+
+vcf_name <- "2island_1mig_model.vcf"
+coverage <- 10000
+# "popinfo" codes which sample comes from which population. If the ith element
+# of "popinfo" is n, then the ith sample is included in the nth population.
+# "popinfo" must be 0-indexed and should not skip any numbers
+popinfo <- rep(0:1, each=10)
+haploid_counts <- c(20, 20)
+fs <- get_pooled_folded_fs(vcf_name, coverage, popinfo, haploid_counts)
+fs
+
+# Export fs to a text file with one number per line.
+# First the length of each dimension in the SFS, then a divider,
+# then the values of the SFS
+# This gets read into a numpy array for use in moments
+write(c(dim(fs), "-----", fs), "test_poolseq_sfs.txt", ncolumns=1)
+
+
+
+
+
+
+
+
+
+
