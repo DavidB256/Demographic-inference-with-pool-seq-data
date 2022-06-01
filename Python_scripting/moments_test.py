@@ -9,4 +9,8 @@ data_dict = moments.Misc.make_data_dict_vcf(input_vcf, input_popinfo)
 fs = moments.Spectrum.from_data_dict(data_dict, pop_ids=["pop0", "pop1", "pop2"],
                                      projections=[4, 4, 4], polarized=False)
 
+for i in data_dict:
+    print(i)
+    print(data_dict[i])
+
 print(fs)
