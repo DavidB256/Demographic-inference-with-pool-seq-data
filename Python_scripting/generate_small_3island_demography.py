@@ -24,6 +24,5 @@ ts = msprime.sim_ancestry(samples=sample_counts, demography=dem,
 mut = msprime.sim_mutations(ts, rate=mu, random_seed=1)
 
 # Write results to VCF
-with open(out_dir + "3island_small_model.vcf" %
-          (mig_rate_exp), "w") as f:
+with open(out_dir + "3island_small_model.vcf", "w") as f:
     mut.write_vcf(f)
