@@ -13,16 +13,18 @@ get_pooled_folded_fs <- function(vcf_name, poolSeq_coverage, popinfo,
   vcf_table <- as.data.frame(vcf_genind@tab)
   # Polarize "vcf_table" to remove repeat columns
   polarized_vcf_table <- vcf_table[ , which(sapply(names(vcf_table),
-                                                  str_sub, -1, -1) == "1")]
+                                                  str_sub, -1, -1) == "0")]
   # Subdivide VCF file by population
   populations <- lapply(0:max(popinfo), 
                         function(i) 
                           { polarized_vcf_table[which(popinfo==i),] })
   allele_counts <- lapply(1:num_of_pops,
                           function(i) {apply(populations[[i]], 2, sum) })
-  allele_counts <- lapply(1:num_of_pops,
-                          function(i) {sapply(allele_counts[[i]], function(j) 
-                                         { min(j, haploid_counts[i] - j) } ) })
+  # allele_counts <- lapply(1:num_of_pops,
+  #                         function(i) { sapply(1:length(allele_counts[[1]]), function(j) 
+  #                                        { ifelse(allele_counts[[3]][j] > haploid_counts[1] / 2,
+  #                                                 haploid_counts[i] - allele_counts[[i]][j],
+  #                                                 allele_counts[[i]][j]) } ) } )
   # Apply noise in order to emulate the effects of Pool-seq
   allele_freqs <- lapply(1:num_of_pops, 
                          function(i) { allele_counts[[i]] / haploid_counts[i] } )
@@ -47,13 +49,14 @@ get_pooled_folded_fs <- function(vcf_name, poolSeq_coverage, popinfo,
 # of "popinfo" is n, then the ith sample is included in the nth population.
 # "popinfo" must be 0-indexed and should not skip any numbers
 
-vcf_name <- "2island_1mig_model.vcf"
-popinfo <- rep(0:1, each=10)
-haploid_counts <- c(20, 20)
+# vcf_name <- "2island_1mig_model.vcf"
+# popinfo <- rep(0:1, each=10)
+# haploid_counts <- c(20, 20)
 vcf_name <- "3island_small_model.vcf"
 popinfo <- rep(0:2, each=2)
 haploid_counts <- c(4, 4, 4)
-coverage <- 10
+
+coverage <- 10000
 debug(get_pooled_folded_fs)
 undebug(get_pooled_folded_fs)
 fs <- get_pooled_folded_fs(vcf_name, coverage, popinfo, haploid_counts)
@@ -133,7 +136,9 @@ write(c(dim(fs), "-----", fs), "test_poolseq_sfs.txt", ncolumns=1)
 #  [0.0 0.0 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --]
 #  [0.0 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --]]
 
-
+# allele_counts <- lapply(1:num_of_pops,
+#                         function(i) {sapply(allele_counts[[i]], function(j) 
+#                         { min(j, haploid_counts[i] - j) } ) })
 
 
 
