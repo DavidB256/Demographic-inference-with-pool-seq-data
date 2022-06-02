@@ -20,11 +20,6 @@ get_pooled_folded_fs <- function(vcf_name, poolSeq_coverage, popinfo,
                           { polarized_vcf_table[which(popinfo==i),] })
   allele_counts <- lapply(1:num_of_pops,
                           function(i) {apply(populations[[i]], 2, sum) })
-  # allele_counts <- lapply(1:num_of_pops,
-  #                         function(i) { sapply(1:length(allele_counts[[1]]), function(j) 
-  #                                        { ifelse(allele_counts[[3]][j] > haploid_counts[1] / 2,
-  #                                                 haploid_counts[i] - allele_counts[[i]][j],
-  #                                                 allele_counts[[i]][j]) } ) } )
   # Apply noise in order to emulate the effects of Pool-seq
   allele_freqs <- lapply(1:num_of_pops, 
                          function(i) { allele_counts[[i]] / haploid_counts[i] } )
@@ -49,14 +44,14 @@ get_pooled_folded_fs <- function(vcf_name, poolSeq_coverage, popinfo,
 # of "popinfo" is n, then the ith sample is included in the nth population.
 # "popinfo" must be 0-indexed and should not skip any numbers
 
-# vcf_name <- "2island_1mig_model.vcf"
-# popinfo <- rep(0:1, each=10)
-# haploid_counts <- c(20, 20)
-vcf_name <- "3island_small_model.vcf"
-popinfo <- rep(0:2, each=2)
-haploid_counts <- c(4, 4, 4)
+vcf_name <- "2island_1mig_model.vcf"
+popinfo <- rep(0:1, each=10)
+haploid_counts <- c(20, 20)
+# vcf_name <- "3island_small_model.vcf"
+# popinfo <- rep(0:2, each=2)
+# haploid_counts <- c(4, 4, 4)
 
-coverage <- 10000
+coverage <- 100000
 debug(get_pooled_folded_fs)
 undebug(get_pooled_folded_fs)
 fs <- get_pooled_folded_fs(vcf_name, coverage, popinfo, haploid_counts)
@@ -66,7 +61,7 @@ fs
 # First the length of each dimension in the SFS, then a divider,
 # then the values of the SFS
 # This gets read into a numpy array for use in moments
-write(c(dim(fs), "-----", fs), "test_poolseq_sfs.txt", ncolumns=1)
+write(c(dim(fs), "-----", rev(fs)), "poolseq_sfs_2island_test_serialized.txt", ncolumns=1)
 
 # Moments output for 3island_small_model.vcf
 # 
@@ -140,7 +135,10 @@ write(c(dim(fs), "-----", fs), "test_poolseq_sfs.txt", ncolumns=1)
 #                         function(i) {sapply(allele_counts[[i]], function(j) 
 #                         { min(j, haploid_counts[i] - j) } ) })
 
-
-
+# allele_counts <- lapply(1:num_of_pops,
+#                         function(i) { sapply(1:length(allele_counts[[1]]), function(j) 
+#                                        { ifelse(allele_counts[[3]][j] > haploid_counts[1] / 2,
+#                                                 haploid_counts[i] - allele_counts[[i]][j],
+#                                                 allele_counts[[i]][j]) } ) } )
 
 

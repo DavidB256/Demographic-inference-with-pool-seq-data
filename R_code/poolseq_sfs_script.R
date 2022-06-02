@@ -1,9 +1,9 @@
-
-args = commandArgs(trailingOnly=TRUE)
+library(stringr)
+library(vcfR)
 
 # This function was copied from Thomas Taus' poolSeq R package source code
 sample.alleles <- function(p, size, mode=c("coverage", "individuals"), Ncensus=NA, ploidy=2) {
-  # determin number of return values
+  # determine number of return values
   maxlen <- max(length(p), length(size))
   # check length of a, n and size parameter
   if(maxlen %% length(p) != 0 || maxlen %% length(size) != 0)
@@ -31,5 +31,59 @@ sample.alleles <- function(p, size, mode=c("coverage", "individuals"), Ncensus=N
                   rhyper(nn=maxlen, m=p*Ncensus*ploidy, n=(1-p)*Ncensus*ploidy, k=size[1]*ploidy)/(size[1]*ploidy)
                 }))
 }
+
+# This function mimics moments' "Spectrum.from_data_dict" function, but with the
+# application of pool-seq noise to allele frequencies
+get_pooled_folded_fs <- function(vcf_name, popinfo, haploid_counts, poolseq_coverage) {
+  num_of_pops <- length(haploid_counts)
+  # Import VCF file "vcf_name" as "vcf_table"
+  vcf <- read.vcfR(vcf_name, verbose=FALSE)
+  vcf_genind <- vcfR2genind(vcf)
+  vcf_table <- as.data.frame(vcf_genind@tab)
+  # Polarize "vcf_table" to remove repeat columns
+  polarized_vcf_table <- vcf_table[ , which(sapply(names(vcf_table),
+                                                   str_sub, -1, -1) == "0")]
+  # Subdivide VCF file by population
+  populations <- lapply(0:max(popinfo), 
+                        function(i) 
+                        { polarized_vcf_table[which(popinfo==i),] })
+  allele_counts <- lapply(1:num_of_pops,
+                          function(i) {apply(populations[[i]], 2, sum) })
+  # Apply noise in order to emulate the effects of pool-seq with the sample.alleles
+  # function from Thomas Taus' poolSeq package
+  allele_freqs <- lapply(1:num_of_pops, 
+                         function(i) { allele_counts[[i]] / haploid_counts[i] } )
+  pooled_allele_freqs <- lapply(allele_freqs, 
+                                function(x) 
+                                {sample.alleles(x, 
+                                                size=poolseq_coverage, 
+                                                mode="coverage") } )
+  pooled_allele_counts <- lapply(1:num_of_pops,
+                                 function(i) 
+                                 { round(pooled_allele_freqs[[i]]$p.smpld * haploid_counts[i]) } )
+  # Assemble site frequence spectrum
+  fs <- array(0, sapply(haploid_counts, function(i) {i + 1}))
+  for (i in 1:length(pooled_allele_counts[[1]])) {
+    coord <- sapply(pooled_allele_counts, function(x) { x[i] + 1 })
+    fs[rbind(coord)] <- fs[rbind(coord)] + 1
+  }
+  fs
+}
+
+# Hands command line arguments
+args = commandArgs(trailingOnly=TRUE)
+if (length(args) != 4) { stop("Error: Four command line arguments must be supplied.", call.=FALSE) }
+vcf_name <- args[1]
+popinfo <- eval(parse(text=args[2])) 
+haploid_counts <- eval(parse(text=args[3]))
+poolseq_coverage <- as.numeric(args[4])
+
+fs <- get_pooled_folded_fs(vcf_name, popinfo, haploid_counts, poolseq_coverage)
+# Serialize SFS for use in Python with moments
+write(c(dim(fs), "-----", rev(fs)), "poolseq_sfs_2island_test_serialized.txt", ncolumns=1)
+
+
+
+
 
 
