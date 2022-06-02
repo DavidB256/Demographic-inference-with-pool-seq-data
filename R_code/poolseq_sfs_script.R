@@ -72,15 +72,16 @@ get_pooled_folded_fs <- function(vcf_name, popinfo, haploid_counts, poolseq_cove
 
 # Hands command line arguments
 args = commandArgs(trailingOnly=TRUE)
-if (length(args) != 4) { stop("Error: Four command line arguments must be supplied.", call.=FALSE) }
+if (length(args) != 5) { stop("Error: Five command line arguments must be supplied.", call.=FALSE) }
 vcf_name <- args[1]
 popinfo <- eval(parse(text=args[2])) 
 haploid_counts <- eval(parse(text=args[3]))
 poolseq_coverage <- as.numeric(args[4])
+output_file_name <- args[5]
 
 fs <- get_pooled_folded_fs(vcf_name, popinfo, haploid_counts, poolseq_coverage)
 # Serialize SFS for use in Python with moments
-write(c(dim(fs), "-----", rev(fs)), "poolseq_sfs_2island_test_serialized.txt", ncolumns=1)
+write(c(dim(fs), "-----", rev(fs)), output_file_name, ncolumns=1)
 
 
 
