@@ -17,13 +17,8 @@ fs = moments.Spectrum.from_data_dict(data_dict, pop_ids=["pop0", "pop1"],
 def two_island_admixture(params, ns):
     nu1, nu2, T = params
     mig_rate = 0.1
-
-    sts = moments.LinearSystem_1D.steady_state_1D(ns[0] + ns[1])
-    fs = moments.Spectrum(sts)
-    fs = moments.Manips.split_1D_to_2D(fs, ns[0], ns[1])
-    fs.integrate([nu1, nu2], T, m=np.array([[0, mig_rate], [mig_rate, 0]]))
-
-    return fs
+    return moments.Demographics2D.split_mig([nu1, nu2, T, mig_rate], ns,
+                                            pop_ids=["pop0", "pop1"])
 
 lower_bound = [100, 100, 1e-3]
 upper_bound = [100, 100, 1000]
