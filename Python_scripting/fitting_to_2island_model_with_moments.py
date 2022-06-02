@@ -30,13 +30,17 @@ lower_bound = [1e-3, 1e-3, 1e-3]
 upper_bound = [200, 200, 1000]
 
 out_f = open(output, "w")
+header_string = "nu1_initial\tnu2_initial\tT_initial\tnu1_optimized\tnu_2_optimized\tT_optimized\ttheta\t\tlog-likelihood\n"
+print(header_string, end="")
+out_f.write(header_string)
 
 for i in range(iterations):
     params = [np.random.uniform(lower_bound[j], upper_bound[j])
               for j in range(3)]
     popt = moments.Inference.optimize_log(params, fs, two_island_admixture,
                                           lower_bound=lower_bound,
-                                          upper_bound=upper_bound)
+                                          upper_bound=upper_bound,
+                                          maxiter=100)
     model = two_island_admixture(popt, ns)
     ll_model = moments.Inference.ll_multinom(model, fs)
     theta = moments.Inference.optimal_sfs_scaling(model, fs)
