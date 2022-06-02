@@ -1,5 +1,4 @@
 import moments
-import dadi
 import numpy as np
 import sys
 
@@ -11,8 +10,8 @@ popinfo = "/scratch/djb3ve/data/popinfo_file_for_2island_model_10n.txt"
 output = "/scratch/djb3ve/data/moments_fitting_2islands.txt"
 ns = [20, 20]
 
-data_dict = dadi.Misc.make_data_dict_vcf(vcf, popinfo)
-fs = dadi.Spectrum.from_data_dict(data_dict, pop_ids=["pop0", "pop1"],
+data_dict = moments.Misc.make_data_dict_vcf(vcf, popinfo)
+fs = moments.Spectrum.from_data_dict(data_dict, pop_ids=["pop0", "pop1"],
                                      projections=ns, polarized=False)
 
 def two_island_admixture(params, ns):
