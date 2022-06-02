@@ -25,8 +25,8 @@ def two_island_admixture(params, ns):
 
     return fs
 
-lower_bound = [1e-3, 1e-3, 1e-3]
-upper_bound = [200, 200, 10]
+lower_bound = [100, 100, 1e-3]
+upper_bound = [100, 100, 10]
 
 out_f = open(output, "w")
 header_string = "nu1_initial\tnu2_initial\tT_initial\tnu1_optimized\tnu_2_optimized\tT_optimized\ttheta\t\tlog-likelihood\n"
