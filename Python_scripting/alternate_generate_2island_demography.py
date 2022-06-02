@@ -29,15 +29,12 @@ dem.set_migration_rate("pop0", "pop1", 0)
 dem.set_migration_rate("pop1", "pop0", 0)
 dem.add_symmetric_migration_rate_change(T_split, ["pop0", "pop1"], mig_rate)
 
-ts = msprime.sim_ancestry(samples=samples, demography=demography,
+ts = msprime.sim_ancestry(samples=samples, demography=dem,
                           sequence_length=seq_len, recombination_rate=rho,
                           ploidy=2, random_seed=1)
 mts = msprime.sim_mutations(ts, rate=mu, random_seed=1)
 
-# Add mutations
-mut = msprime.sim_mutations(ts, rate=mu, random_seed=1)
-
 # Write results to VCF
 with open(out_dir + "alt_2island_%dmig_model.vcf" %
           (mig_rate_exp), "w") as f:
-    mut.write_vcf(f)
+    mts.write_vcf(f)
