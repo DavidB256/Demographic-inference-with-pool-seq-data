@@ -9,18 +9,11 @@ iterations = int(sys.argv[1])
 vcf = "/scratch/djb3ve/data/2island_1mig_model.vcf"
 popinfo = "/scratch/djb3ve/data/popinfo_file_for_2island_model_10n.txt"
 output = "/scratch/djb3ve/data/moments_fitting_2islands.txt"
-ns = [10, 10]
-
-print("Setup complete.")
+ns = [20, 20]
 
 data_dict = dadi.Misc.make_data_dict_vcf(vcf, popinfo)
-
-print("VCF imported.")
-
 fs = dadi.Spectrum.from_data_dict(data_dict, pop_ids=["pop0", "pop1"],
                                      projections=ns, polarized=False)
-
-print("VCF converted to SFS.")
 
 def two_island_admixture(params, ns):
     nu1, nu2, T = params
@@ -33,10 +26,8 @@ def two_island_admixture(params, ns):
 
     return fs
 
-print("Model function defined.")
-
-lower_bound = [100, 100, 1]
-upper_bound = [100, 100, 1]
+lower_bound = [1e-3, 1e-3, 1e-3]
+upper_bound = [200, 200, 1000]
 
 out_f = open(output, "w")
 

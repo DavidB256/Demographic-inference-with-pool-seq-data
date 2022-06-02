@@ -6,11 +6,11 @@ input_fs = "/scratch/djb3ve/data/" + sys.argv[1]
 
 with open(input_fs, "r") as f_fs:
     dims = []
-    values = []
     line = f_fs.readline()
     while line[:-1].isnumeric():
         dims.append(int(line[:-1]))
         line = f_fs.readline()
+    values = []
     line = f_fs.readline()
     while line:
         values.append(int(line[:-1]))
