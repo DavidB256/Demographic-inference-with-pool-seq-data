@@ -26,4 +26,4 @@ def two_island_admixture(params, ns):
     return fs
 
 Optimize_Functions.Optimize_Routine(fs, prefix, "two_island_admixture",
-                                    two_island_admixture, 3, 4, fs_folded=True)
+                                    two_island_admixture, 3, 3, fs_folded=True)
