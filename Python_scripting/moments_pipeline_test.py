@@ -4,7 +4,7 @@ import numpy as np
 import sys
 
 # Import VCF file from prior msprime simulation and popinfo file
-vcf = "/scratch/djb3ve/data/2island_1mig_model.vcf"
+vcf = "/scratch/djb3ve/data/alt_2island_1mig_model.vcf"
 popinfo = "/scratch/djb3ve/data/popinfo_file_for_2island_model_10n.txt"
 output = "/scratch/djb3ve/data/moments_fitting_2islands.txt"
 ns = [20, 20]
