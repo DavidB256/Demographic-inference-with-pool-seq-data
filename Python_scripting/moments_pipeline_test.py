@@ -8,7 +8,7 @@ vcf = "/scratch/djb3ve/data/2island_1mig_model.vcf"
 popinfo = "/scratch/djb3ve/data/popinfo_file_for_2island_model_10n.txt"
 output = "/scratch/djb3ve/data/moments_fitting_2islands.txt"
 ns = [20, 20]
-prefix = "V1"
+prefix = sys.argv[1]
 
 data_dict = moments.Misc.make_data_dict_vcf(vcf, popinfo)
 fs = moments.Spectrum.from_data_dict(data_dict, pop_ids=["pop0", "pop1"],
