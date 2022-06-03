@@ -17,7 +17,6 @@ def two_island_admixture(params, ns):
     nu1, nu2, T, mig_rate = params
     return moments.Demographics2D.split_mig([nu1, nu2, T, mig_rate], ns,
                                             pop_ids=["pop0", "pop1"])
-
     return fs
 
 Optimize_Functions.Optimize_Routine(fs, prefix, "two_island_admixture",

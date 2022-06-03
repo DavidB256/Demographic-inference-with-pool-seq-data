@@ -16,7 +16,7 @@ rho = 1.25e-10
 seq_len = 1e5
 mig_rate = 10 ** -mig_rate_exp
 default_pop = 100
-T_split = 1e6
+T_split = 1e1
 samples = [msprime.SampleSet(10, population="pop0", ploidy=2),
            msprime.SampleSet(10, population="pop1", ploidy=2)]
 
