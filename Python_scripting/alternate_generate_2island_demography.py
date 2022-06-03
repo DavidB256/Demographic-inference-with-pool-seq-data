@@ -11,14 +11,13 @@ mig_rate_exp = int(sys.argv[1])
 out_dir = "/scratch/djb3ve/data/"
 # Standard D. melanogaster mutation rate is 2.9e-6
 mu = 1e-7
-# Standard D. melanogaster recombination rate is 1.25e-7
-rho = 1.25e-10
+rho = 1.25e-7
 seq_len = 1e5
 mig_rate = 10 ** -mig_rate_exp
 default_pop = 100
 T_split = 5
-samples = [msprime.SampleSet(10, population="pop0", ploidy=2),
-           msprime.SampleSet(10, population="pop1", ploidy=2)]
+samples = [msprime.SampleSet(10, population="pop0"),
+           msprime.SampleSet(10, population="pop1")]
 
 sample_counts = {}
 for i in range(2):
