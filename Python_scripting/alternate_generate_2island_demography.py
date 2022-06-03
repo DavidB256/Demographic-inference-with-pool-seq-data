@@ -9,8 +9,10 @@ mig_rate_exp = int(sys.argv[1])
 
 # Setup
 out_dir = "/scratch/djb3ve/data/"
-mu = 2.9e-6
-rho = 1.25e-7
+# Standard D. melanogaster mutation rate is 2.9e-6
+mu = 2.9e-9
+# Standard D. melanogaster recombination rate is 1.25e-7
+rho = 1.25e-10
 seq_len = 1e5
 mig_rate = 10 ** -mig_rate_exp
 default_pop = 100
