@@ -29,7 +29,7 @@ demography.add_population(name="ancestral", initial_size=default_pop * 2)
 demography.add_population_split(time=T_split, derived=["pop0", "pop1"], ancestral="ancestral")
 demography.set_symmetric_migration_rate(["pop0", "pop1"], mig_rate)
 
-ts = msprime.sim_ancestry(samples=samples, demography=dem,
+ts = msprime.sim_ancestry(samples=samples, demography=demography,
                           sequence_length=seq_len, recombination_rate=rho,
                           ploidy=2, random_seed=1)
 mts = msprime.sim_mutations(ts, rate=mu, random_seed=1)
