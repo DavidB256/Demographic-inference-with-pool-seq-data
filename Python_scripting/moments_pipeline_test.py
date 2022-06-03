@@ -20,4 +20,4 @@ def null_split(params, ns):
     return fs
 
 Optimize_Functions.Optimize_Routine(fs, prefix, "null_split",
-                                    two_island_admixture, 3, 4, fs_folded=True)
+                                    null_split, 3, 4, fs_folded=True)

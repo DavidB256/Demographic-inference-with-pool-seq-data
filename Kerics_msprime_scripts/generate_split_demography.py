@@ -1,20 +1,10 @@
 import numpy as np
 import msprime
-import IPython
-from IPython.display import SVG
 import os
 import math
-import moments
-from moments import Numerics
-from moments import Integration
-from moments import Spectrum
-import dadi
-from dadi import Misc
 import os
 import sys
 import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
 
 #write vcf with given pre-determined scenario
 
