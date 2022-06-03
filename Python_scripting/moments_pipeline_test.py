@@ -4,9 +4,9 @@ import numpy as np
 import sys
 
 # Import VCF file from prior msprime simulation and popinfo file
-vcf = "/scratch/djb3ve/data/msprime_null_split.vcf"
-popinfo = "/scratch/djb3ve/data/popinfo_2_samples_of_50.txt"
-ns = [100, 100]
+vcf = "/scratch/djb3ve/data/alt_2island_3mig_model.vcf"
+popinfo = "/scratch/djb3ve/data/popinfo_file_for_2island_model_10n.txt"
+ns = [20, 20]
 prefix = sys.argv[1]
 
 data_dict = moments.Misc.make_data_dict_vcf(vcf, popinfo)
@@ -17,7 +17,6 @@ def null_split(params, ns):
     nu1, nu2, T, mig_rate = params
     return moments.Demographics2D.split_mig([nu1, nu2, T, mig_rate], ns,
                                             pop_ids=["pop0", "pop1"])
-    return fs
 
 Optimize_Functions.Optimize_Routine(fs=fs, outfile=prefix,
                                     model_name="null_split",
