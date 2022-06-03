@@ -14,7 +14,7 @@ rho = 1.25e-7
 seq_len = 1e5
 mig_rate = 10 ** -mig_rate_exp
 default_pop = 100
-T_split = 1
+T_split = 10
 samples = [msprime.SampleSet(10, population="pop0", ploidy=2),
            msprime.SampleSet(10, population="pop1", ploidy=2)]
 
@@ -29,7 +29,7 @@ dem.add_population(name="pop1", initial_size=default_pop)
 dem.set_migration_rate("pop0", "pop1", mig_rate)
 dem.set_migration_rate("pop1", "pop0", mig_rate)
 dem.add_population_split(time=T_split, derived=["pop0", "pop1"], ancestral="ancestral")
-dem.add_symmetric_migration_rate_change(T_split, ["pop0", "pop1"], mig_rate)
+#dem.add_symmetric_migration_rate_change(T_split, ["pop0", "pop1"], mig_rate)
 
 ts = msprime.sim_ancestry(samples=samples, demography=dem,
                           sequence_length=seq_len, recombination_rate=rho,
