@@ -14,7 +14,7 @@ rho = 1.25e-7
 seq_len = 1e5
 mig_rate = 10 ** -mig_rate_exp
 default_pop = 100
-T_split = 10
+T_split = 1e6
 samples = [msprime.SampleSet(10, population="pop0", ploidy=2),
            msprime.SampleSet(10, population="pop1", ploidy=2)]
 
@@ -23,10 +23,10 @@ for i in range(2):
     sample_counts[i] = 10
 
 demography = msprime.Demography()
-demography.add_population(name="pop0", initial_size=popA_size)
-demography.add_population(name="pop1", initial_size=popB_size)
-demography.add_population(name="ancestral", initial_size=popC_size)
-demography.add_population_split(time=time_split, derived=["pop0", "pop1"], ancestral="ancestral")
+demography.add_population(name="pop0", initial_size=default_pop)
+demography.add_population(name="pop1", initial_size=default_pop)
+demography.add_population(name="ancestral", initial_size=default_pop * 2)
+demography.add_population_split(time=T_split, derived=["pop0", "pop1"], ancestral="ancestral")
 demography.set_symmetric_migration_rate(["pop0", "pop1"], mig_rate)
 
 ts = msprime.sim_ancestry(samples=samples, demography=dem,
