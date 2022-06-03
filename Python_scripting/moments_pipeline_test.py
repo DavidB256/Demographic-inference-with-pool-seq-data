@@ -24,5 +24,5 @@ Optimize_Functions.Optimize_Routine(fs=fs, outfile=prefix,
                                     func=null_split,
                                     rounds=3, param_number=4,
                                     fs_folded=True,
-                                    maxiters=[200 for i in range(3)],
+                                    maxiters=[100 for i in range(3)],
                                     param_labels=["nu1", "nu2", "T_split", "mig_rate"])
