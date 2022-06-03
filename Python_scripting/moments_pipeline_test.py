@@ -19,5 +19,10 @@ def null_split(params, ns):
                                             pop_ids=["pop0", "pop1"])
     return fs
 
-Optimize_Functions.Optimize_Routine(fs, prefix, "null_split",
-                                    null_split, 3, 4, fs_folded=True)
+Optimize_Functions.Optimize_Routine(fs=fs, outfile=prefix,
+                                    model_name="null_split",
+                                    func=null_split,
+                                    rounds=3, param_number=4,
+                                    fs_folded=True,
+                                    maxiters=[200 for i in range(3)],
+                                    param_labels=["nu1", "nu2", "T_split", "mig_rate"])
