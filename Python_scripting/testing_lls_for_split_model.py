@@ -20,7 +20,7 @@ lower_bound = [1e-5 for i in range(4)]
 upper_bound = [10, 10, 1, 1]
 
 def fit_params(starting_params):
-    popt = moments.Inference.optimize_log(starting_params, fs, two_island_admixture,
+    popt = moments.Inference.optimize(starting_params, fs, two_island_admixture,
                                           lower_bound=lower_bound,
                                           upper_bound=upper_bound,
                                           maxiter=100, verbose=0)
@@ -31,9 +31,8 @@ def fit_params(starting_params):
           Starting parameters: {0}
           Optimized parameters: {1}
           LL: {2}
-          theta: {3}
-          """.format(starting_params, popt, ll_model, theta))
+          theta: {3}""".format(starting_params, popt, ll_model, theta))
 
 fit_params([1, 1, 0.1, 0.1])
-fit_params([3, 2, 1, 3e-5])
+fit_params([3, 2, 0.9, 3e-5])
 fit_params([0.9 for i in range(4)])
