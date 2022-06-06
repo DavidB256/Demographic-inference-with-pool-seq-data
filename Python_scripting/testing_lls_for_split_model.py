@@ -30,8 +30,8 @@ def fit_params(starting_params):
     theta = moments.Inference.optimal_sfs_scaling(model, fs)
     print("""
           Starting parameters: {0}\n
-          LL: {2}\n
-          theta: {3}
+          LL: {1}\n
+          theta: {2}
           """.format(starting_params, ll_model, theta))
 
 params = [1 for i in range(4)]
