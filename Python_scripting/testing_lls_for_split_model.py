@@ -23,7 +23,7 @@ def fit_params(starting_params):
     popt = moments.Inference.optimize_log(starting_params, fs, two_island_admixture,
                                           lower_bound=lower_bound,
                                           upper_bound=upper_bound,
-                                          maxiter=100, verbose=10)
+                                          maxiter=100, verbose=0)
     model = two_island_admixture(popt, ns)
     ll_model = moments.Inference.ll_multinom(model, fs)
     theta = moments.Inference.optimal_sfs_scaling(model, fs)
@@ -34,5 +34,6 @@ def fit_params(starting_params):
           theta: {3}
           """.format(starting_params, popt, ll_model, theta))
 
-fit_params([30, 20, 1, 3e-5])
+fit_params([1, 1, 0.1, 0.1])
+fit_params([3, 2, 1, 3e-5])
 fit_params([1 for i in range(4)])
