@@ -25,14 +25,14 @@ def fit_params(starting_params):
                                           upper_bound=upper_bound,
                                           maxiter=100, verbose=10)
     model = two_island_admixture(popt, ns)
-    model = two_island_admixture(starting_params, ns)
     ll_model = moments.Inference.ll_multinom(model, fs)
     theta = moments.Inference.optimal_sfs_scaling(model, fs)
     print("""
           Starting parameters: {0}
-          LL: {1}
-          theta: {2}
-          """.format(starting_params, ll_model, theta))
+          Optimized parameters: {1}
+          LL: {2}
+          theta: {3}
+          """.format(starting_params, popt, ll_model, theta))
 
 fit_params([30, 20, 1, 3e-5])
 fit_params([1 for i in range(4)])
