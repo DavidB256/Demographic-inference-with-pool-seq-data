@@ -20,21 +20,19 @@ lower_bound = [1e-2 for i in range(4)]
 upper_bound = [1e2 for i in range(4)]
 
 def fit_params(starting_params):
-    # popt = moments.Inference.optimize_log(starting_params, fs, two_island_admixture,
-    #                                       lower_bound=lower_bound,
-    #                                       upper_bound=upper_bound,
-    #                                       maxiter=100, verbose=10)
-    # model = two_island_admixture(popt, ns)
+    popt = moments.Inference.optimize_log(starting_params, fs, two_island_admixture,
+                                          lower_bound=lower_bound,
+                                          upper_bound=upper_bound,
+                                          maxiter=100, verbose=10)
+    model = two_island_admixture(popt, ns)
     model = two_island_admixture(starting_params, ns)
     ll_model = moments.Inference.ll_multinom(model, fs)
     theta = moments.Inference.optimal_sfs_scaling(model, fs)
     print("""
-          Starting parameters: {0}\n
-          LL: {1}\n
+          Starting parameters: {0}
+          LL: {1}
           theta: {2}
           """.format(starting_params, ll_model, theta))
 
-params = [1 for i in range(4)]
-fit_params(params)
-params = [30 / 4e-3, 20 / 4e-3, 1000 / 2e-3, 3e-5 / 2e-3]
-fit_params(params)
+fit_params([30, 20, 1, 3e-5])
+fit_params([1 for i in range(4)])
