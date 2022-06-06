@@ -22,15 +22,15 @@ lower_bound = [1e-3 for i in range(4)]
 upper_bound = [1e4 for i in range(4)]
 
 out_f = open(output, "w")
-header_string = "nu1_initial\t" +
-                "nu2_initial\t" +
-                "T_initial\t" +
-                "m_initial\t"
-                "nu1_optimized\t" +
-                "nu_2_optimized\t" +
-                "T_optimized\t" +
-                "m_optimized\t"
-                "theta\t" +
+header_string = "nu1_initial\t" + \
+                "nu2_initial\t" + \
+                "T_initial\t" + \
+                "m_initial\t" + \
+                "nu1_optimized\t" + \
+                "nu_2_optimized\t" + \
+                "T_optimized\t" + \
+                "m_optimized\t" + \
+                "theta\t" + \
                 "log-likelihood\n"
 out_f.write(header_string)
 print(header_string, end="")
@@ -44,15 +44,15 @@ for i in range(iterations):
     model = two_island_admixture(popt, ns)
     ll_model = moments.Inference.ll_multinom(model, fs)
     theta = moments.Inference.optimal_sfs_scaling(model, fs)
-    output_string = "%f\t" % params[0] +
-                    "%f\t" % params[1] +
-                    "%f\t" % params[2] +
-                    "%f\t" % params[3] +
-                    "%f\t" % popt[0] +
-                    "%f\t" % popt[1] +
-                    "%f\t" % popt[2] +
-                    "%f\t" % popt[3] +
-                    "%f\t" % theta +
+    output_string = "%f\t" % params[0] + \
+                    "%f\t" % params[1] + \
+                    "%f\t" % params[2] + \
+                    "%f\t" % params[3] + \
+                    "%f\t" % popt[0] + \
+                    "%f\t" % popt[1] + \
+                    "%f\t" % popt[2] + \
+                    "%f\t" % popt[3] + \
+                    "%f\t" % theta + \
                     "%f\t" % ll_model + "\n"
     out_f.write(output_string)
     print(output_string, end="")
