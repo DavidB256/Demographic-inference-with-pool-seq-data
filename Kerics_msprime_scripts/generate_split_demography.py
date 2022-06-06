@@ -9,9 +9,9 @@ import numpy as np
 #write vcf with given pre-determined scenario
 
 #set up variables
-popA_size = 3_000
-popB_size = 2_000
-popC_size = 5_000
+popA_size = 30
+popB_size = 20
+popC_size = 50
 time_split = 1000
 sample_pop1 = 10
 sample_pop2 = 10
@@ -38,5 +38,5 @@ ts = msprime.sim_ancestry(samples=samples, demography=demography, sequence_lengt
 mts = msprime.sim_mutations(ts, rate=1e-9)
 
 #writes vcf
-with open("/scratch/djb3ve/data/msprime_null_split.vcf", "w") as vcf_file:
+with open("/scratch/djb3ve/data/msprime_null_split_small.vcf", "w") as vcf_file:
                       mts.write_vcf(vcf_file)
