@@ -17,13 +17,13 @@ def two_island_admixture(params, ns):
     return moments.Demographics2D.split_mig(params, ns, pop_ids=["pop0", "pop1"])
 
 lower_bound = [1e-2 for i in range(4)]
-upper_bound = [1e3 for i in range(4)]
+upper_bound = [1e2 for i in range(4)]
 
 def fit_params(starting_params):
     popt = moments.Inference.optimize_log(starting_params, fs, two_island_admixture,
                                           lower_bound=lower_bound,
                                           upper_bound=upper_bound,
-                                          maxiter=100, verbose=0)
+                                          maxiter=100, verbose=1)
     model = two_island_admixture(popt, ns)
     ll_model = moments.Inference.ll_multinom(model, fs)
     theta = moments.Inference.optimal_sfs_scaling(model, fs)
