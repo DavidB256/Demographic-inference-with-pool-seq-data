@@ -40,7 +40,7 @@ for i in range(iterations):
     popt = moments.Inference.optimize_log(params, fs, two_island_admixture,
                                           lower_bound=lower_bound,
                                           upper_bound=upper_bound,
-                                          maxiter=100)
+                                          maxiter=100, verbose=10)
     model = two_island_admixture(popt, ns)
     ll_model = moments.Inference.ll_multinom(model, fs)
     theta = moments.Inference.optimal_sfs_scaling(model, fs)
