@@ -13,8 +13,8 @@ popA_size = 3_000
 popB_size = 2_000
 popC_size = 5_000
 time_split = 1000
-sample_pop1 = 50
-sample_pop2 = 50
+sample_pop1 = 10
+sample_pop2 = 10
 
 #write demography
 demography = msprime.Demography()
