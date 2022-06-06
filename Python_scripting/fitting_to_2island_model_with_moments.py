@@ -19,7 +19,7 @@ def two_island_admixture(params, ns):
     return moments.Demographics2D.split_mig(params, ns, pop_ids=["pop0", "pop1"])
 
 lower_bound = [1e-3 for i in range(4)]
-upper_bound = [1e4 for i in range(4)]
+upper_bound = [1e2 for i in range(4)]
 
 out_f = open(output, "w")
 header_string = "nu1_initial\t" + \
