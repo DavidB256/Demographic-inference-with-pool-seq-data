@@ -16,7 +16,7 @@ def two_island_admixture(params, ns):
     # params = [nu1, nu2, T_split, mig_rate]
     return moments.Demographics2D.split_mig(params, ns, pop_ids=["pop0", "pop1"])
 
-lower_bound = [1e-3 for i in range(4)]
+lower_bound = [1e-5 for i in range(4)]
 upper_bound = [10, 10, 1, 1]
 
 def fit_params(starting_params):
@@ -36,4 +36,4 @@ def fit_params(starting_params):
 
 fit_params([1, 1, 0.1, 0.1])
 fit_params([3, 2, 1, 3e-5])
-fit_params([1 for i in range(4)])
+fit_params([0.9 for i in range(4)])
