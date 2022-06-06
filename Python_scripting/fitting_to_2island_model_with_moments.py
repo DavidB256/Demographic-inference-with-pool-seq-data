@@ -19,7 +19,7 @@ def two_island_admixture(params, ns):
     return moments.Demographics2D.split_mig(params, ns, pop_ids=["pop0", "pop1"])
 
 lower_bound = [1e-3 for i in range(4)]
-upper_bound = [1e2 for i in range(4)]
+upper_bound = [10 for i in range(4)]
 
 out_f = open(output, "w")
 header_string = "nu1_initial\t" + \
@@ -36,14 +36,11 @@ out_f.write(header_string)
 print(header_string, end="")
 
 for i in range(iterations):
-    print("here1")
     params = [np.random.uniform(lower_bound[j], upper_bound[j]) for j in range(4)]
-    print("here2")
     popt = moments.Inference.optimize_log(params, fs, two_island_admixture,
                                           lower_bound=lower_bound,
                                           upper_bound=upper_bound,
                                           maxiter=100, verbose=1)
-    print("here3")
     model = two_island_admixture(popt, ns)
     ll_model = moments.Inference.ll_multinom(model, fs)
     theta = moments.Inference.optimal_sfs_scaling(model, fs)
