@@ -32,14 +32,14 @@ def write_vcf_from_demography(file_name, samples, demography,
 
 for sample_size in sample_sizes:
     # control
-    file_name = f"control_demography_{sample_size}n"
+    file_name = f"control_demography_{sample_size}n.vcf"
     if not os.path.exists(output_dir + file_name) or overwrite:
         demography = msprime.Demography()
         demography.add_population(name="pop0", initial_size=pop_size)
         write_vcf_from_demography(file_name, sample_size, demography)
 
     # two_pop_split
-    file_name = f"two_pop_split_{sample_size}n"
+    file_name = f"two_pop_split_{sample_size}n.vcf"
     if not os.path.exists(output_dir + file_name) or overwrite:
         demography = msprime.Demography()
         demography.add_population(name="pop0", initial_size=pop_size)
@@ -52,7 +52,7 @@ for sample_size in sample_sizes:
                                   demography)
 
     # bottleneck
-    # file_name = f"two_pop_split_{sample_size}n"
+    # file_name = f"two_pop_split_{sample_size}n.vcf"
     # if not os.path.exists(output_dir + file_name) or overwrite:
     #     demography = msprime.Demography()
     #     demography.add_population
