@@ -51,9 +51,10 @@ haploid_counts <- c(20, 20)
 # popinfo <- rep(0:2, each=2)
 # haploid_counts <- c(4, 4, 4)
 
-coverage <- 100000
+coverage <- 10
 debug(get_pooled_folded_fs)
 undebug(get_pooled_folded_fs)
+set.seed(1)
 fs <- get_pooled_folded_fs(vcf_name, coverage, popinfo, haploid_counts)
 fs
 
