@@ -14,7 +14,7 @@ rho = 1.25e-7 # D. melanogaster recombination rate
 seq_len = 1e5
 pop_size = 100
 mig_rate = 1e-2
-t_split =
+t_split = 10
 
 sample_sizes = [10, 50, 100, 200, 500]
 
