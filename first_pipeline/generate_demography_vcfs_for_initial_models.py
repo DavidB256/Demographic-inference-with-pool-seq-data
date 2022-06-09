@@ -42,9 +42,9 @@ for sample_size in sample_sizes:
     file_name = f"two_pop_split_{sample_size}n"
     if not os.path.exists(output_dir + file_name) or overwrite:
         demography = msprime.Demography()
-        demography.add_population(name="pop0", initial_size=default_pop)
-        demography.add_population(name="pop1", initial_size=default_pop)
-        demography.add_population(name="ancestral", initial_size=default_pop * 2)
+        demography.add_population(name="pop0", initial_size=pop_size)
+        demography.add_population(name="pop1", initial_size=pop_size)
+        demography.add_population(name="ancestral", initial_size=pop_size * 2)
         demography.add_population_split(time=t_split, derived=["pop0", "pop1"], ancestral="ancestral")
         demography.set_symmetric_migration_rate(["pop0", "pop1"], mig_rate)
         write_vcf_from_demography(file_name, sample_size, demography)
