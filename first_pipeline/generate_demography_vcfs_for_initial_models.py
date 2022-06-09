@@ -7,7 +7,7 @@ overwrite = False
 if len(sys.argv) > 1 and sys.argv[1] in ["o", "overwrite"]:
     overwrite = True
 
-output_dir = "/scratch/djb3ve/data/initial_models/"
+output_dir = "/scratch/djb3ve/data/first_models/"
 
 mu = 2.9e-6 # D. melanogaster mutation rate
 rho = 1.25e-7 # D. melanogaster recombination rate
