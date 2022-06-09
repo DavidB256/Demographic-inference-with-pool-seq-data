@@ -47,7 +47,7 @@ for sample_size in sample_sizes:
         demography.add_population(name="ancestral", initial_size=pop_size * 2)
         demography.add_population_split(time=t_split, derived=["pop0", "pop1"], ancestral="ancestral")
         demography.set_symmetric_migration_rate(["pop0", "pop1"], mig_rate)
-        write_vcf_from_demography(file_name, sample_size, demography)
+        write_vcf_from_demography(file_name, [sample_size] * 2, demography)
 
     # bottleneck
     # file_name = f"two_pop_split_{sample_size}n"
