@@ -30,7 +30,7 @@ def write_vcf_from_demography(file_name, samples, demography,
         mts.write_vcf(f)
 
 
-for sample_size in samples_sizes:
+for sample_size in sample_sizes:
     # control
     file_name = f"control_demography_{sample_size}n"
     if not os.path.exists(out_dir + file_name) or overwrite:
