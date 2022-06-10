@@ -86,7 +86,7 @@ iterations = 10
 
 # Remove pre-existing instructions file and re-write header if we are not appending to
 # "pipeline_instructions.txt".
-if not append_pipeline_instruction:
+if not append_to_pipeline_instruction:
     instructions_col_names = ["VCF_file", "popinfo", "haploid_counts", "poolseq_depth", "popinfo_file"]
     with open(instructions_output, "w") as f:
         f.write("# ")

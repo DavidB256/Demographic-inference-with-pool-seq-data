@@ -11,6 +11,7 @@ def two_pop_split_model():
 # This script should iterate through pipeline_instructions
 instructions = "/scratch/djb3ve/data/pipeline_instructions.txt"
 
+# Everything below this is temporary.
 vcf = "/scratch/djb3ve/data/first_models/control_demography_n10_seed1.vcf"
 popinfo = "/scratch/djb3ve/first_models/control_demography_n10_popinfo.txt"
 ns = [10]
@@ -20,6 +21,7 @@ fs = moments.Spectrum.from_data_dict(data_dict, pop_ids=["pop0"], projections=ns
 
 lower_bound = [1e-3 for i in range(2)]
 upper_bound = [10 for i in range(2)]
+
 
 params = [np.random.uniform(lower_bound[j], upper_bound[j]) for j in range(2)]
 popt = moments.Inference.optimize_log(params, fs, control_model,
