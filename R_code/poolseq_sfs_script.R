@@ -33,7 +33,7 @@ sample.alleles <- function(p, size, mode=c("coverage", "individuals"), Ncensus=N
 }
 
 # This function mimics moments' "Spectrum.from_data_dict" function, but with the
-# application of pool-seq noise to allele frequencies
+# application of pool-seq noise to allele frequencies via the "sample.alleles" function
 get_pooled_folded_fs <- function(vcf_name, popinfo, haploid_counts, poolseq_coverage) {
   num_of_pops <- length(haploid_counts)
   # Import VCF file "vcf_name" as "vcf_table"
