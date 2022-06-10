@@ -79,14 +79,13 @@ iterations = 10
 
 # Remove pre-existing instructions file and write header
 instructions_col_names = ["VCF_file", "popinfo", "haploid_counts", "poolseq_depth", "popinfo_file"]
-with open(instructions_output, "w") as f:
+with open(instructions_output, "w+") as f:
     f.write("# ")
     for col_name in instructions_col_names:
         f.write(col_name + "\t")
     f.write("\n")
 
 for sample_size in sample_sizes:
-    print(sample_size)
     # control
     control_demography = msprime.Demography()
     control_demography.add_population(name="pop0", initial_size=100)
