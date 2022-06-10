@@ -43,7 +43,7 @@ class Demography_plus:
     # Writes "iterations" many VCF files created from tree sequences created by
     # "get_ts_with_muts" with different random seeds. Writes the popinfo file if it
     # does not yet exist.
-    def write_vcf_and_popinfo(self, output_dir, iterations=1, instructions_output, poolseq_depths):
+    def write_vcf_and_popinfo(self, iterations=1, output_dir, instructions_output, poolseq_depths):
         for seed in range(1, iterations+1):
             with open(f"{output_dir}{self.dem_name}_seed{seed}.vcf", "w") as f:
                 self.get_ts_with_muts(random_seed=seed).write_vcf(f)
@@ -91,7 +91,7 @@ for sample_size in sample_sizes:
     control_demography.add_population(name="pop0", initial_size=100)
     dem_plus = Demography_plus(control_demography, f"control_demography_n{sample_size}",
                                {"pop0": sample_size})
-    dem_plus.write_vcf_and_popinfo(output_dir, iterations, instructions_output, poolseq_depths)
+    dem_plus.write_vcf_and_popinfo(iterations, output_dir, instructions_output, poolseq_depths)
 
     # two_pop_split
     two_pop_split_demography = msprime.Demography()
@@ -102,4 +102,4 @@ for sample_size in sample_sizes:
     two_pop_split_demography.set_symmetric_migration_rate(["pop0", "pop1"], 1e-2)
     dem_plus = Demography_plus(two_pop_split_demography, f"two_pop_split_demography_n{sample_size}",
                                {"pop0": sample_size, "pop1": sample_size})
-    dem_plus.write_vcf_and_popinfo(output_dir, iterations, instructions_output, poolseq_depths)
+    dem_plus.write_vcf_and_popinfo(iterations, output_dir, instructions_output, poolseq_depths)
