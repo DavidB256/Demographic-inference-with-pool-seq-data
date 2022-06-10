@@ -11,7 +11,6 @@ class Demography_plus:
         self.dem = dem
         self.dem_name = dem_name
         self.samples = samples
-        self.population_names = population_names
         self.mu = mu
         self.rho = rho
         self.seq_len = seq_len
