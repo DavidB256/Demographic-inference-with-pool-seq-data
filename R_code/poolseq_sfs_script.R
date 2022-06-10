@@ -78,6 +78,7 @@ get_pooled_folded_fs <- function(vcf_name, popinfo, haploid_counts, poolseq_cove
 }
 
 setwd("/scratch/djb3ve/data/first_models/")
+message(getwd())
 
 # Hands command line arguments
 args = commandArgs(trailingOnly=TRUE)
