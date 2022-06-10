@@ -80,12 +80,12 @@ iterations = 10
 with open(instructions_output, "w") as f:
     f.write("#VCF_file\tpopinfo\thaploid_counts\tpoolseq_depth\toutput_file")
 
-for samples_size in sample_sizes:
+for sample_size in sample_sizes:
     # control
     control_demography = msprime.Demography()
     control_demography.add_population(name="pop0", initial_size=100)
     dem_plus = Demography_plus(control_demography, "control_demography_n{sample_size}",
-                               {"pop0": samples_size})
+                               {"pop0": sample_size})
     dem_plus.write_vcf_and_popinfo(output_dir, iterations)
     dem_plus.append_pipeline_instruction(instructions_output, poolseq_depths)
 
@@ -98,6 +98,6 @@ for samples_size in sample_sizes:
     two_pop_split_demography.add_population_split(time=t_split, derived=["pop0", "pop1"], ancestral="ancestral")
     two_pop_split_demography.set_symmetric_migration_rate(["pop0", "pop1"], 1e-2)
     dem_plus = Demography_plus(two_pop_split_demography, "two_pop_split_demography_n{sample_size}",
-                               {"pop0": samples_size, "pop1":sample_size})
+                               {"pop0": sample_size, "pop1": sample_size})
     dem_plus.write_vcf_and_popinfo(output_dir, iterations)
     dem_plus.append_pipeline_instruction(instructions_output, poolseq_depths)
