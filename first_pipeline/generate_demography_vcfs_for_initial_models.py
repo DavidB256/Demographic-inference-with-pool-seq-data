@@ -70,20 +70,29 @@ class Demography_plus:
                         "\t" + popinfo_r_vector + "\t" + haploid_counts_r_vector + \
                         "\t" + str(poolseq_depth) + "\t" + self.dem_name + "_popinfo.txt\n")
 
+# Handle command line arguments.
+# If first (optional) command line argument is "a" or "append", do not overwrite
+# "pipeline_instructions.txt".
+append_to_pipeline_instruction = False
+if len(sys.argv) > 1 and sys.argv[1] in ["a", "append"]:
+    append_to_pipeline_instruction = True
+
 # Setup
 output_dir = "/scratch/djb3ve/data/first_models/"
 instructions_output = output_dir + "pipeline_instructions.txt"
-sample_sizes = [10, 50, 100, 200, 500]
+sample_sizes = [10, 50, 100, 200]
 poolseq_depths = [5, 10, 40, 70, 100]
 iterations = 10
 
-# Remove pre-existing instructions file and write header
-instructions_col_names = ["VCF_file", "popinfo", "haploid_counts", "poolseq_depth", "popinfo_file"]
-with open(instructions_output, "w") as f:
-    f.write("# ")
-    for col_name in instructions_col_names:
-        f.write(col_name + "\t")
-    f.write("\n")
+# Remove pre-existing instructions file and re-write header if we are not appending to
+# "pipeline_instructions.txt".
+if not append_pipeline_instruction:
+    instructions_col_names = ["VCF_file", "popinfo", "haploid_counts", "poolseq_depth", "popinfo_file"]
+    with open(instructions_output, "w") as f:
+        f.write("# ")
+        for col_name in instructions_col_names:
+            f.write(col_name + "\t")
+        f.write("\n")
 
 for sample_size in sample_sizes:
     print(sample_size)
