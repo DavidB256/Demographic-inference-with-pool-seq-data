@@ -30,8 +30,8 @@ class Demography_plus:
         return ts
 
     # Writes popinfo file into "output_dir" from "samples" instance variable
-    def write_popinfo(self, output_dir):
-        with open(output_dir + self.dem_name + "_popinfo.txt", "w") as f:
+    def write_popinfo(self, output_file):
+        with open(output_file, "w") as f:
             sample_counter = 0
             # Samples is a dictionary whose keys are population names and whose values
             # are organism sample sizes
@@ -44,6 +44,7 @@ class Demography_plus:
     # "get_ts_with_muts" with different random seeds. Writes the popinfo file if it
     # does not yet exist.
     def write_vcf_and_popinfo(self, iterations, output_dir, instructions_output, poolseq_depths):
+        # Need to iterate with 1-based counting for seeds because a seed of 0 is invalid
         for seed in range(1, iterations+1):
             with open(f"{output_dir}{self.dem_name}_seed{seed}.vcf", "w") as f:
                 self.get_ts_with_muts(random_seed=seed).write_vcf(f)
