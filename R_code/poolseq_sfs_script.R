@@ -80,12 +80,11 @@ popinfo <- eval(parse(text=args[2]))
 haploid_counts <- eval(parse(text=args[3]))
 poolseq_coverage <- as.numeric(args[4])
 
-setwd("/scratch/djb3ve/data/first_models/serialized_pooled_sfss/")
-
 output_file_name <- paste(str_sub(vcf_name, end=-5), "pooled_sfs_serialized.txt", sep="")
 
 fs <- get_pooled_folded_fs(vcf_name, popinfo, haploid_counts, poolseq_coverage)
 # Serialize SFS for use in Python with moments
+setwd("/scratch/djb3ve/data/first_models/serialized_pooled_sfss/")
 write(c(dim(fs), "-----", rev(fs)), output_file_name, ncolumns=1)
 
 
