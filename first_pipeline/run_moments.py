@@ -12,10 +12,9 @@ def two_pop_split_model():
 # This script should iterate through pipeline_instructions
 instructions = "/scratch/djb3ve/data/pipeline_instructions.txt"
 
-# Everything below this is temporary.
+# EVERYTHING BELOW THIS IS TEMPORARY.
 
 # Handle command line arguments
-if
 iterations = int(sys.argv[1])
 
 vcf = "/scratch/djb3ve/data/first_models/control_demography_n10_seed1.vcf"
