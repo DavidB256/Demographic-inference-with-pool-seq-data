@@ -68,7 +68,7 @@ class Demography_plus:
             for poolseq_depth in poolseq_depths:
                 f.write(f"{self.dem_name}_seed{seed}.vcf" + "\t" + \
                         "\t" + popinfo_r_vector + "\t" + haploid_counts_r_vector + \
-                        "\t" + str(poolseq_depth) + "\t" + self.dem_name + "_popinfo.txt")
+                        "\t" + str(poolseq_depth) + "\t" + self.dem_name + "_popinfo.txt\n")
 
 # Setup
 output_dir = "/scratch/djb3ve/data/first_models/"
