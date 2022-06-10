@@ -75,7 +75,7 @@ setwd("/scratch/djb3ve/data/first_models/")
 # Hands command line arguments
 args = commandArgs(trailingOnly=TRUE)
 if (length(args) != 4) { stop("Error: Five command line arguments must be supplied.", call.=FALSE) }
-vcf_name <- args[1]
+vcf_name <- as.character(args[1])
 popinfo <- eval(parse(text=args[2])) 
 haploid_counts <- eval(parse(text=args[3]))
 poolseq_coverage <- as.numeric(args[4])
