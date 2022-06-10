@@ -58,18 +58,18 @@ iterations = 10
 for samples_size in sample_sizes:
     # control
     control_demography = msprime.Demography()
-    control_demography.add_population(name="pop0", initial_size=pop_size)
+    control_demography.add_population(name="pop0", initial_size=100)
     dem_plus = Demography_plus(control_demography, "control_demography_n{sample_size}",
                                {"pop0": samples_size})
     dem_plus.write_vcf(output_dir, iterations)
 
     # two_pop_split
     two_pop_split_demography = msprime.Demography()
-    two_pop_split_demography.add_population(name="pop0", initial_size=pop_size)
-    two_pop_split_demography.add_population(name="pop1", initial_size=pop_size)
-    two_pop_split_demography.add_population(name="ancestral", initial_size=pop_size * 2)
+    two_pop_split_demography.add_population(name="pop0", initial_size=100)
+    two_pop_split_demography.add_population(name="pop1", initial_size=100)
+    two_pop_split_demography.add_population(name="ancestral", initial_size=200)
     two_pop_split_demography.add_population_split(time=t_split, derived=["pop0", "pop1"], ancestral="ancestral")
-    two_pop_split_demography.set_symmetric_migration_rate(["pop0", "pop1"], mig_rate)
+    two_pop_split_demography.set_symmetric_migration_rate(["pop0", "pop1"], 1e-2)
     dem_plus = Demography_plus(two_pop_split_demography, "two_pop_split_demography_n{sample_size}",
                                {"pop0": samples_size, "pop1":sample_size})
     dem_plus.write_vcf(output_dir, 10)
