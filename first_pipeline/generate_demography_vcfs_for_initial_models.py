@@ -58,8 +58,8 @@ class Demography_plus:
         popinfo_r_vector = "c("
         haploid_counts_r_vector = "c("
         for sample in self.samples:
-            popinfo_r_vector += str(self.samples[samples]) + ", "
-            haploid_counts_r_vector += str(self.samples[samples] * self.ploidy) + ", "
+            popinfo_r_vector += str(self.samples[sample]) + ", "
+            haploid_counts_r_vector += str(self.samples[sample] * self.ploidy) + ", "
         popinfo_r_vector = popinfo_r_vector[:-1] + ")"
         haploid_counts_r_vector = haploid_counts_r_vector[:-1] + ")"
 
@@ -87,7 +87,6 @@ for sample_size in sample_sizes:
                                {"pop0": sample_size})
     dem_plus.write_vcf_and_popinfo(output_dir, iterations)
     dem_plus.append_pipeline_instruction(instructions_output, poolseq_depths)
-
 
     # two_pop_split
     two_pop_split_demography = msprime.Demography()
