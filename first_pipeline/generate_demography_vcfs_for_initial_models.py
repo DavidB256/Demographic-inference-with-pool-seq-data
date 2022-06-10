@@ -43,17 +43,18 @@ class Demography_plus:
     # Writes "iterations" many VCF files created from tree sequences created by
     # "get_ts_with_muts" with different random seeds. Writes the popinfo file if it
     # does not yet exist.
-    def write_vcf_and_popinfo(self, output_dir, iterations=1):
-        for i in range(iterations):
-            with open(f"{output_dir}{self.dem_name}_seed{i}.vcf", "w") as f:
-                self.get_ts_with_muts(random_seed=i+1).write_vcf(f)
+    def write_vcf_and_popinfo(self, output_dir, iterations=1, instructions_output, poolseq_depths):
+        for seed in range(1, iterations+1):
+            with open(f"{output_dir}{self.dem_name}_seed{seed}.vcf", "w") as f:
+                self.get_ts_with_muts(random_seed=seed).write_vcf(f)
+                self.append_pipeline_instruction(seed, instructions_output, poolseq_depths)
 
         if not os.path.exists(output_dir + self.dem_name + "_popinfo.txt"):
             self.write_popinfo(output_dir)
 
     # Add lines to the pipeline instructions file to be read into poolseq_sfs_script.R
     # by its wrapper, one line per level of pool-seq depth
-    def append_pipeline_instruction(self, instructions_output, poolseq_depths):
+    def append_pipeline_instruction(self, seed, instructions_output, poolseq_depths):
         # Format popinfo and haploid_counts as R vectors to be evaluated in the R script
         popinfo_r_vector = "c("
         haploid_counts_r_vector = "c("
@@ -65,10 +66,11 @@ class Demography_plus:
 
         with open(instructions_output, "w+") as f:
             for poolseq_depth in poolseq_depths:
-                f.write(f"{output_dir}{self.dem_name}_seed{i}.vcf" + "\t" + \
+                f.write(f"{self.dem_name}_seed{seed}.vcf" + "\t" + \
                         "\t" + popinfo_r_vector + "\t" + haploid_counts_r_vector + \
-                        "\t" + str(poolseq_depth) + "\t" + instructions_output)
+                        "\t" + str(poolseq_depth) + "\t" + self.dem_name + "_popinfo.txt")
 
+# Setup
 output_dir = "/scratch/djb3ve/data/first_models/"
 instructions_output = output_dir + "pipeline_instructions.txt"
 sample_sizes = [10, 50, 100, 200, 500]
@@ -76,17 +78,20 @@ poolseq_depths = [5, 10, 40, 70, 100]
 iterations = 10
 
 # Remove pre-existing instructions file and write header
+instructions_col_names = ["VCF_file", "popinfo", "haploid_counts", "poolseq_depth", "popinfo_file"]
 with open(instructions_output, "w") as f:
-    f.write("#VCF_file\tpopinfo\thaploid_counts\tpoolseq_depth\toutput_file")
+    f.write("# ")
+    for col_name in instructions_col_names:
+        f.write(col_name + "\t")
+    f.write("\n")
 
 for sample_size in sample_sizes:
     # control
     control_demography = msprime.Demography()
     control_demography.add_population(name="pop0", initial_size=100)
-    dem_plus = Demography_plus(control_demography, "control_demography_n{sample_size}",
+    dem_plus = Demography_plus(control_demography, f"control_demography_n{sample_size}",
                                {"pop0": sample_size})
-    dem_plus.write_vcf_and_popinfo(output_dir, iterations)
-    dem_plus.append_pipeline_instruction(instructions_output, poolseq_depths)
+    dem_plus.write_vcf_and_popinfo(output_dir, iterations, instructions_output, poolseq_depths)
 
     # two_pop_split
     two_pop_split_demography = msprime.Demography()
@@ -95,7 +100,6 @@ for sample_size in sample_sizes:
     two_pop_split_demography.add_population(name="ancestral", initial_size=200)
     two_pop_split_demography.add_population_split(time=t_split, derived=["pop0", "pop1"], ancestral="ancestral")
     two_pop_split_demography.set_symmetric_migration_rate(["pop0", "pop1"], 1e-2)
-    dem_plus = Demography_plus(two_pop_split_demography, "two_pop_split_demography_n{sample_size}",
+    dem_plus = Demography_plus(two_pop_split_demography, f"two_pop_split_demography_n{sample_size}",
                                {"pop0": sample_size, "pop1": sample_size})
-    dem_plus.write_vcf_and_popinfo(output_dir, iterations)
-    dem_plus.append_pipeline_instruction(instructions_output, poolseq_depths)
+    dem_plus.write_vcf_and_popinfo(output_dir, iterations, instructions_output, poolseq_depths)
