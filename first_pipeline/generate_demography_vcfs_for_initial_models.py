@@ -98,7 +98,7 @@ for sample_size in sample_sizes:
     two_pop_split_demography.add_population(name="pop0", initial_size=100)
     two_pop_split_demography.add_population(name="pop1", initial_size=100)
     two_pop_split_demography.add_population(name="ancestral", initial_size=200)
-    two_pop_split_demography.add_population_split(time=t_split, derived=["pop0", "pop1"], ancestral="ancestral")
+    two_pop_split_demography.add_population_split(time=10, derived=["pop0", "pop1"], ancestral="ancestral")
     two_pop_split_demography.set_symmetric_migration_rate(["pop0", "pop1"], 1e-2)
     dem_plus = Demography_plus(two_pop_split_demography, f"two_pop_split_demography_n{sample_size}",
                                {"pop0": sample_size, "pop1": sample_size})
