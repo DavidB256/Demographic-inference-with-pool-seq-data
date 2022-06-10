@@ -15,6 +15,7 @@ instructions = "/scratch/djb3ve/data/pipeline_instructions.txt"
 # Everything below this is temporary.
 
 # Handle command line arguments
+if
 iterations = int(sys.argv[1])
 
 vcf = "/scratch/djb3ve/data/first_models/control_demography_n10_seed1.vcf"
@@ -38,7 +39,7 @@ for i in range(iterations):
     popt = moments.Inference.optimize_log(params, fs, control_model,
                                           lower_bound=lower_bound,
                                           upper_bound=upper_bound,
-                                          maxiter=100, verbose=1)
+                                          maxiter=100, verbose=0)
     model = control_model(popt, ns)
     ll_model = moments.Inference.ll_multinom(model, fs)
     theta = moments.Inference.optimal_sfs_scaling(model, fs)

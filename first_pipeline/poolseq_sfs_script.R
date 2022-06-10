@@ -37,14 +37,7 @@ sample.alleles <- function(p, size, mode=c("coverage", "individuals"), Ncensus=N
 get_pooled_folded_fs <- function(vcf_name, popinfo, haploid_counts, poolseq_coverage) {
   num_of_pops <- length(haploid_counts)
   # Import VCF file "vcf_name" as "vcf_table"
-  
-  message(vcf_name)
-  system(paste("head", vcf_name, sep=" "))
-  
   vcf <- read.vcfR(vcf_name, verbose=FALSE)
-  
-  
-  
   vcf_genind <- vcfR2genind(vcf)
   vcf_table <- as.data.frame(vcf_genind@tab)
   # Polarize "vcf_table" to remove repeat columns
