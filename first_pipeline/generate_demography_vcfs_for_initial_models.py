@@ -61,8 +61,8 @@ class Demography_plus:
         for sample in self.samples:
             popinfo_r_vector += str(self.samples[sample]) + ", "
             haploid_counts_r_vector += str(self.samples[sample] * self.ploidy) + ", "
-        popinfo_r_vector = popinfo_r_vector[:-1] + ")"
-        haploid_counts_r_vector = haploid_counts_r_vector[:-1] + ")"
+        popinfo_r_vector = popinfo_r_vector[:-2] + ")"
+        haploid_counts_r_vector = haploid_counts_r_vector[:-2] + ")"
 
         with open(instructions_output, "w+") as f:
             for poolseq_depth in poolseq_depths:
