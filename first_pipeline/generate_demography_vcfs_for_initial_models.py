@@ -50,7 +50,7 @@ class Demography_plus:
                 self.append_pipeline_instruction(seed, instructions_output, poolseq_depths)
 
         if not os.path.exists(output_dir + self.dem_name + "_popinfo.txt"):
-            self.write_popinfo(output_dir)
+            self.write_popinfo(output_dir + self.dem_name + "_popinfo.txt")
 
     # Add lines to the pipeline instructions file to be read into poolseq_sfs_script.R
     # by its wrapper, one line per level of pool-seq depth
