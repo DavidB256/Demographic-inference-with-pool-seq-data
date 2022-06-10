@@ -70,15 +70,17 @@ get_pooled_folded_fs <- function(vcf_name, popinfo, haploid_counts, poolseq_cove
   fs
 }
 
-setwd("/scratch/djb3ve/data/first_pipeline/")
+setwd("/scratch/djb3ve/data/first_models/")
 
 # Hands command line arguments
 args = commandArgs(trailingOnly=TRUE)
-if (length(args) != 5) { stop("Error: Five command line arguments must be supplied.", call.=FALSE) }
+if (length(args) != 4) { stop("Error: Five command line arguments must be supplied.", call.=FALSE) }
 vcf_name <- args[1]
 popinfo <- eval(parse(text=args[2])) 
 haploid_counts <- eval(parse(text=args[3]))
 poolseq_coverage <- as.numeric(args[4])
+
+setwd("/scratch/djb3ve/data/first_models/serialized_pooled_sfss/")
 
 output_file_name <- paste(str_sub(vcf_name, end=-5), "pooled_sfs_serialized.txt", sep="")
 

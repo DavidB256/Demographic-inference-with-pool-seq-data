@@ -86,6 +86,7 @@ with open(instructions_output, "w") as f:
     f.write("\n")
 
 for sample_size in sample_sizes:
+    print(sample_size)
     # control
     control_demography = msprime.Demography()
     control_demography.add_population(name="pop0", initial_size=100)
