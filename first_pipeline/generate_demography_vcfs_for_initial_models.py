@@ -66,7 +66,7 @@ class Demography_plus:
 
         with open(instructions_output, "a") as f:
             for poolseq_depth in poolseq_depths:
-                f.write(f"{self.dem_name}_seed{seed}.vcf" + "\t" + \
+                f.write(f"{self.dem_name}_seed{seed}.vcf" + \
                         "\t" + popinfo_r_vector + "\t" + haploid_counts_r_vector + \
                         "\t" + str(poolseq_depth) + "\t" + self.dem_name + "_popinfo.txt\n")
 

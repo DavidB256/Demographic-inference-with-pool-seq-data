@@ -12,5 +12,6 @@ while read -r line; do
   if [ ${line:0:1} == "#" ]; then
     continue
   fi
+  # Otherwise, run R script with line of "instructions" as command line arguments
   Rscript $script $line
 done < $instructions

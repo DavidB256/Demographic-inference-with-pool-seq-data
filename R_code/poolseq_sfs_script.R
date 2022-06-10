@@ -1,5 +1,5 @@
 library(stringr)
-library(vcfR)
+library(vcfR, quietly=TRUE)
 
 # This function was copied from Thomas Taus' poolSeq R package source code
 sample.alleles <- function(p, size, mode=c("coverage", "individuals"), Ncensus=NA, ploidy=2) {
@@ -37,7 +37,14 @@ sample.alleles <- function(p, size, mode=c("coverage", "individuals"), Ncensus=N
 get_pooled_folded_fs <- function(vcf_name, popinfo, haploid_counts, poolseq_coverage) {
   num_of_pops <- length(haploid_counts)
   # Import VCF file "vcf_name" as "vcf_table"
+  
+  message(vcf_name)
+  system(paste("head", vcf_name, sep=" "))
+  
   vcf <- read.vcfR(vcf_name, verbose=FALSE)
+  
+  
+  
   vcf_genind <- vcfR2genind(vcf)
   vcf_table <- as.data.frame(vcf_genind@tab)
   # Polarize "vcf_table" to remove repeat columns
@@ -74,15 +81,14 @@ setwd("/scratch/djb3ve/data/first_models/")
 
 # Hands command line arguments
 args = commandArgs(trailingOnly=TRUE)
-if (length(args) != 4) { stop("Error: Five command line arguments must be supplied.", call.=FALSE) }
+if (length(args) < 4) { stop("Error: Five command line arguments must be supplied.", call.=FALSE) }
+
 vcf_name <- as.character(args[1])
 popinfo <- eval(parse(text=args[2])) 
 haploid_counts <- eval(parse(text=args[3]))
 poolseq_coverage <- as.numeric(args[4])
 
 output_file_name <- paste(str_sub(vcf_name, end=-5), "_pooled_sfs_serialized.txt", sep="")
-
-print(getwd())
 
 fs <- get_pooled_folded_fs(vcf_name, popinfo, haploid_counts, poolseq_coverage)
 # Serialize SFS for use in Python with moments
