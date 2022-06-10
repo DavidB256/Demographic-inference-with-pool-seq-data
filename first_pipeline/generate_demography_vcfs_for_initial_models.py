@@ -46,7 +46,7 @@ class Demography_plus:
     def write_vcf_and_popinfo(self, output_dir, iterations=1):
         for i in range(iterations):
             with open(f"{output_dir}{self.dem_name}_seed{i}.vcf", "w") as f:
-                self.get_ts_with_muts(random_seed=i).write_vcf(f)
+                self.get_ts_with_muts(random_seed=i+1).write_vcf(f)
 
         if not os.path.exists(output_dir + self.dem_name + "_popinfo.txt"):
             self.write_popinfo(output_dir)
