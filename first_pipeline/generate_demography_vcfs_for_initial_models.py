@@ -1,6 +1,7 @@
 import msprime
 import sys
 import os.path
+import os
 
 class Demography_plus:
     def __init__(self, dem, dem_name, samples,
@@ -23,9 +24,9 @@ class Demography_plus:
     # with demography and parameters specified by instance variables
     def get_ts_with_muts(self, random_seed=1):
         ts = msprime.sim_ancestry(samples=self.samples, demography=self.dem,
-                                       sequence_length=self.seq_len,
-                                       recombination_rate=self.rho,
-                                       ploidy=self.ploidy, random_seed=random_seed)
+                                  sequence_length=self.seq_len,
+                                  recombination_rate=self.rho,
+                                  ploidy=self.ploidy, random_seed=random_seed)
         ts = msprime.sim_mutations(ts, rate=self.mu, random_seed=random_seed)
         return ts
 
@@ -51,9 +52,33 @@ class Demography_plus:
         if not os.path.exists(output_dir + self.dem_name + "_popinfo.txt"):
             self.write_popinfo(output_dir)
 
+    # Add lines to the pipeline instructions file to be read into poolseq_sfs_script.R
+    # by its wrapper, one line per level of pool-seq depth
+    def append_pipeline_instruction(self, instructions_output, poolseq_depths):
+        # Format popinfo and haploid_counts as R vectors to be evaluated in the R script
+        popinfo_r_vector = "c("
+        haploid_counts_r_vector = "c("
+        for sample in self.samples:
+            popinfo_r_vector += str(self.samples[samples]) + ", "
+            haploid_counts_r_vector += str(self.samples[samples] * self.ploidy) + ", "
+        popinfo_r_vector = popinfo_r_vector[:-1] + ")"
+        haploid_counts_r_vector = haploid_counts_r_vector[:-1] + ")"
+
+        with open(instructions_output, "w+") as f:
+            for poolseq_depth in poolseq_depths:
+                f.write(f"{output_dir}{self.dem_name}_seed{i}.vcf" + "\t" + \
+                        "\t" + popinfo_r_vector + "\t" + haploid_counts_r_vector + \
+                        "\t" + str(poolseq_depth) + "\t" + instructions_output)
+
 output_dir = "/scratch/djb3ve/data/first_models/"
+instructions_output = output_dir + "pipeline_instructions.txt"
 sample_sizes = [10, 50, 100, 200, 500]
+poolseq_depths = [5, 10, 40, 70, 100]
 iterations = 10
+
+# Remove pre-existing instructions file and write header
+with open(instructions_output, "w") as f:
+    f.write("#VCF_file\tpopinfo\thaploid_counts\tpoolseq_depth\toutput_file")
 
 for samples_size in sample_sizes:
     # control
@@ -61,7 +86,9 @@ for samples_size in sample_sizes:
     control_demography.add_population(name="pop0", initial_size=100)
     dem_plus = Demography_plus(control_demography, "control_demography_n{sample_size}",
                                {"pop0": samples_size})
-    dem_plus.write_vcf(output_dir, iterations)
+    dem_plus.write_vcf_and_popinfo(output_dir, iterations)
+    dem_plus.append_pipeline_instruction(instructions_output, poolseq_depths)
+
 
     # two_pop_split
     two_pop_split_demography = msprime.Demography()
@@ -72,4 +99,5 @@ for samples_size in sample_sizes:
     two_pop_split_demography.set_symmetric_migration_rate(["pop0", "pop1"], 1e-2)
     dem_plus = Demography_plus(two_pop_split_demography, "two_pop_split_demography_n{sample_size}",
                                {"pop0": samples_size, "pop1":sample_size})
-    dem_plus.write_vcf(output_dir, 10)
+    dem_plus.write_vcf_and_popinfo(output_dir, iterations)
+    dem_plus.append_pipeline_instruction(instructions_output, poolseq_depths)

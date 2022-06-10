@@ -70,6 +70,8 @@ get_pooled_folded_fs <- function(vcf_name, popinfo, haploid_counts, poolseq_cove
   fs
 }
 
+setwd("/scratch/djb3ve/data/first_pipeline/")
+
 # Hands command line arguments
 args = commandArgs(trailingOnly=TRUE)
 if (length(args) != 5) { stop("Error: Five command line arguments must be supplied.", call.=FALSE) }
