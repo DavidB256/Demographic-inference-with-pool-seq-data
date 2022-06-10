@@ -11,7 +11,7 @@ if [ $# -eq 0 ]; then
 fi
 instructions=$1
 
-script="/scratch/djb3ve/first_pipeline/poolseq_sfs_script.R"
+script="/scratch/djb3ve/Demographic-inference-with-Pool-seq-data/first_pipeline/poolseq_sfs_script.R"
 
 while read -r line; do
   # Skip lines that are commented out
