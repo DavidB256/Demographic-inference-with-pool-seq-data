@@ -1,3 +1,5 @@
+#!/bin/bash
+
 module load gcc/7.1.0
 module load openmpi/3.1.4
 module load intel/18.0

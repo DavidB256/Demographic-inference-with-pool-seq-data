@@ -6,8 +6,9 @@ def control_model(params, ns):
     # params = [nu, T]
     return moments.Demographics1D.growth(params, ns)
 
-def two_pop_split_model():
-    pass
+def two_pop_split_model(params, ns):
+    # params = [nu1, nu2, T, m]
+    return moments.Demographics2D.split_mig(params, ns)
 
 # This script should iterate through pipeline_instructions
 instructions = "/scratch/djb3ve/data/pipeline_instructions.txt"
@@ -17,30 +18,36 @@ instructions = "/scratch/djb3ve/data/pipeline_instructions.txt"
 # Handle command line arguments
 iterations = int(sys.argv[1])
 
-vcf = "/scratch/djb3ve/data/first_models/control_demography_n10_seed1.vcf"
-popinfo = "/scratch/djb3ve/data/first_models/control_demography_n10_popinfo.txt"
-ns = [10]
+vcf = "/scratch/djb3ve/data/first_models/two_pop_split_demography_n10_seed1.vcf"
+popinfo = "/scratch/djb3ve/data/first_models/two_pop_split_demography_n10_popinfo.txt"
+ns = [10, 10]
 
 data_dict = moments.Misc.make_data_dict_vcf(vcf, popinfo)
-fs = moments.Spectrum.from_data_dict(data_dict, pop_ids=["pop0"], projections=ns, polarized=False)
+fs = moments.Spectrum.from_data_dict(data_dict, pop_ids=["pop0", "pop1"], projections=ns, polarized=False)
 
-lower_bound = [1e-3 for i in range(2)]
-upper_bound = [10 for i in range(2)]
+lower_bound = [1e-3 for i in range(4)]
+upper_bound = [1e-1 for i in range(4)]
 
-column_names_list = ["nu_init", "t_init", "nu_opt", "t_opt", "ll", "theta"]
+column_names_list = ["nu1_init", "nu2_init", "t_init", "mig_init",
+                     "nu1_opt", "nu2_opt", "t_opt", "mig_opt",
+                     "ll", "theta"]
 header = ""
 for name in column_names_list:
     header += name + "\t"
 print(header)
 
 for i in range(iterations):
-    params = [np.random.uniform(lower_bound[j], upper_bound[j]) for j in range(2)]
-    popt = moments.Inference.optimize_log(params, fs, control_model,
+    params = [np.random.uniform(lower_bound[j], upper_bound[j]) for j in range(4)]
+    popt = moments.Inference.optimize_log(params, fs, two_pop_split_model,
                                           lower_bound=lower_bound,
                                           upper_bound=upper_bound,
-                                          maxiter=100, verbose=0)
-    model = control_model(popt, ns)
+                                          maxiter=100, verbose=0,
+                                          multinom=True)
+    model = two_pop_split_model(popt, ns)
     ll_model = moments.Inference.ll_multinom(model, fs)
     theta = moments.Inference.optimal_sfs_scaling(model, fs)
 
-    print("%f\t" * len(column_names_list) % (params[0], params[1], popt[0], popt[1], ll_model, theta))
+    print("%f\t" * len(column_names_list) %
+          (params[0], params[1], params[2], params[3],
+           popt[0], popt[1], popt[2], popt[3],
+           ll_model, theta))
