@@ -1,5 +1,6 @@
 library(stringr)
 library(vcfR, quietly=TRUE)
+library(data.table)
 
 # This function was copied from Thomas Taus' poolSeq R package source code
 sample.alleles <- function(p, size, mode=c("coverage", "individuals"), Ncensus=NA, ploidy=2) {
@@ -44,10 +45,10 @@ get_pooled_folded_fs <- function(vcf_name, popinfo, haploid_counts, poolseq_cove
   vcf_genind <- vcfR2genind(vcf)
   vcf_table <- as.data.frame(vcf_genind@tab)
   # Polarize "vcf_table" to remove repeat columns
-  polarized_vcf_table <- vcf_table[ , which(sapply(names(vcf_table),
-                                                   str_sub, -1, -1) == "0")]
+  polarized_vcf_table <- vcf_table[, which(sapply(names(vcf_table),
+                                                  str_sub, -1, -1) == "0")]
   # Subdivide VCF file by population
-  populations <- lapply(0:max(popinfo),
+  populations <- lapply(unique(popinfo),
                         function(i)
                         { polarized_vcf_table[which(popinfo==i),] })
   allele_counts <- lapply(1:num_of_pops,
@@ -62,29 +63,27 @@ get_pooled_folded_fs <- function(vcf_name, popinfo, haploid_counts, poolseq_cove
                                                 size=poolseq_coverage,
                                                 mode="coverage") } )
   # Convert frequencies to counts with one of two different methods.
-  if (method=="counts") {
+  if (method == "counts") {
     pooled_allele_counts <- lapply(1:num_of_pops,
                                    function(i)
-                                   { allele_count <- pooled_allele_freqs[[i]]$p.smpld * haploid_counts[i]
-                                     if (allele_count > 0 && allele_count < 1) {
-                                       return(1)
-                                     } else {
-                                       return(round(allele_count))
-                                     }
-                                   })
-  } else if () {
+                                   { lapply(pooled_allele_freqs[[i]]$p.smpld,
+                                            function(freq)
+                                            { count <- freq * haploid_counts[i]
+                                              if (count > 0 && count < 0) 1 else round(count)
+                                            }) } )
+  } else if (method == "probs") {
     pooled_allele_counts <- lapply(1:num_of_pops,
                                    function(i)
-                                   { return(rbinom(n=1,
+                                   { return(rbinom(n=length(pooled_allele_freqs[[i]]$p.smpld),
                                                    size=haploid_counts[i],
-                                                   prob=pooled_allele_freqs[[i]]$p.smpld)) }
+                                                   prob=pooled_allele_freqs[[i]]$p.smpld)) } )
   } else {
     stop("Error: 'method' argument must be either 'counts' or 'probs'.", call.=FALSE)
   }
   # Assemble site frequence spectrum
   fs <- array(0, sapply(haploid_counts, function(i) {i + 1}))
   for (i in 1:length(pooled_allele_counts[[1]])) {
-    coord <- sapply(pooled_allele_counts, function(x) { x[i] + 1 })
+    coord <- sapply(pooled_allele_counts, function(x) { x[[i]] + 1 })
     fs[rbind(coord)] <- fs[rbind(coord)] + 1
   }
   return(fs)
@@ -100,7 +99,7 @@ popinfo <- eval(parse(text=args[2]))
 haploid_counts <- eval(parse(text=args[3]))
 poolseq_coverage <- as.numeric(args[4])
 
-output_file_name <- paste(str_sub(vcf_name, end=-5), "_pooled_sfs_serialized.txt", sep="")
+output_file_name <- paste(str_sub(vcf_name, end=-5), "_depth", poolseq_coverage, "_pooled_sfs_serialized.txt", sep="")
 
 fs <- get_pooled_folded_fs(vcf_name, popinfo, haploid_counts, poolseq_coverage)
 # Serialize SFS for use in Python with moments

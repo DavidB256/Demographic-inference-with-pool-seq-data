@@ -48,22 +48,25 @@ class Demography_plus:
         for seed in range(1, iterations+1):
             with open(f"{output_dir}{self.dem_name}_seed{seed}.vcf", "w") as f:
                 self.get_ts_with_muts(random_seed=seed).write_vcf(f)
-                self.append_pipeline_instruction(seed, instructions_output, poolseq_depths)
+                self.append_pipeline_instructions(seed, instructions_output, poolseq_depths)
 
         if not os.path.exists(output_dir + self.dem_name + "_popinfo.txt"):
             self.write_popinfo(output_dir + self.dem_name + "_popinfo.txt")
 
     # Add lines to the pipeline instructions file to be read into poolseq_sfs_script.R
     # by its wrapper, one line per level of pool-seq depth
-    def append_pipeline_instruction(self, seed, instructions_output, poolseq_depths):
+    def append_pipeline_instructions(self, seed, instructions_output, poolseq_depths):
         # Format popinfo and haploid_counts as R vectors to be evaluated in the R script
-        popinfo_r_vector = "c("
+        popinfo_r_vector = "rep(c("
+        for i in range(len(self.samples)):
+            popinfo_r_vector += "%s," % i
+        popinfo_r_vector = popinfo_r_vector[:-1] + "),times=c("
         haploid_counts_r_vector = "c("
         for sample in self.samples:
-            popinfo_r_vector += str(self.samples[sample]) + ", "
-            haploid_counts_r_vector += str(self.samples[sample] * self.ploidy) + ", "
-        popinfo_r_vector = popinfo_r_vector[:-2] + ")"
-        haploid_counts_r_vector = haploid_counts_r_vector[:-2] + ")"
+            popinfo_r_vector += "%d," % self.samples[sample]
+            haploid_counts_r_vector += "%d," % (self.samples[sample] * self.ploidy)
+        popinfo_r_vector = popinfo_r_vector[:-1] + "))"
+        haploid_counts_r_vector = haploid_counts_r_vector[:-1] + ")"
 
         with open(instructions_output, "a") as f:
             for poolseq_depth in poolseq_depths:
@@ -74,20 +77,20 @@ class Demography_plus:
 # Handle command line arguments.
 # If first (optional) command line argument is "a" or "append", do not overwrite
 # "pipeline_instructions.txt".
-append_to_pipeline_instruction = False
+append_to_pipeline_instructions = False
 if len(sys.argv) > 1 and sys.argv[1] in ["a", "append"]:
-    append_to_pipeline_instruction = True
+    append_to_pipelines_instruction = True
 
-# Setup
+# Global variables
 output_dir = "/scratch/djb3ve/data/first_models/"
 instructions_output = output_dir + "pipeline_instructions.txt"
-sample_sizes = [10, 50, 100, 200]
-poolseq_depths = [5, 10, 40, 70, 100]
+sample_sizes = [10, 50, 100, 200, 400]
+poolseq_depths = [10, 40, 70, 100]
 iterations = 10
 
 # Remove pre-existing instructions file and re-write header if we are not appending to
 # "pipeline_instructions.txt".
-if not append_to_pipeline_instruction:
+if not append_to_pipeline_instructions:
     instructions_col_names = ["VCF_file", "popinfo", "haploid_counts", "poolseq_depth", "popinfo_file"]
     with open(instructions_output, "w") as f:
         f.write("# ")
@@ -98,11 +101,11 @@ if not append_to_pipeline_instruction:
 for sample_size in sample_sizes:
     print(sample_size)
     # control
-    control_demography = msprime.Demography()
-    control_demography.add_population(name="pop0", initial_size=100)
-    dem_plus = Demography_plus(control_demography, f"control_demography_n{sample_size}",
-                               {"pop0": sample_size})
-    dem_plus.write_vcf_and_popinfo(iterations, output_dir, instructions_output, poolseq_depths)
+    # control_demography = msprime.Demography()
+    # control_demography.add_population(name="pop0", initial_size=100)
+    # dem_plus = Demography_plus(control_demography, f"control_demography_n{sample_size}",
+    #                            {"pop0": sample_size})
+    # dem_plus.write_vcf_and_popinfo(iterations, output_dir, instructions_output, poolseq_depths)
 
     # two_pop_split
     two_pop_split_demography = msprime.Demography()

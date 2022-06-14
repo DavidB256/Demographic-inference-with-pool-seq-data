@@ -13,5 +13,5 @@ while read -r line; do
     continue
   fi
   # Otherwise, run R script with line of "instructions" as command line arguments
-  Rscript $script $line
+  Rscript $script $line $seed
 done < $instructions
