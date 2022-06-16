@@ -1,5 +1,6 @@
 library(stringr)
 library(vcfR, quietly=TRUE)
+library(data.table)
 
 # This function was copied from Thomas Taus' poolSeq R package source code
 sample.alleles <- function(p, size, mode=c("coverage", "individuals"), Ncensus=NA, ploidy=2) {
@@ -17,6 +18,9 @@ sample.alleles <- function(p, size, mode=c("coverage", "individuals"), Ncensus=N
                 coverage={
                   # if length of 'size' equals '1' then generate target coverage values using the Poisson distribution, otherwise use values of 'size' directly
                   cov <- if(length(size) == 1) rpois(n=maxlen, lambda=size) else size
+                  # Change all zeros in 'cov' to ones. This prevents division by zero in the next line, but makes the assumption that all sites have
+                  # coverage of at least one. Note that sites with zero coverage are extremely rare, especially for larger values of 'size'.
+                  cov[which(cov==0)] <- 1
                   # sample allele frequencies from Binomial distribution based on 'cov' and 'p'
                   p.smpld <- rbinom(n=maxlen, size=cov, prob=p) / cov
                   # return results, including coverage values if they were drawn from a Poisson distribution
@@ -44,10 +48,10 @@ get_pooled_folded_fs <- function(vcf_name, popinfo, haploid_counts, poolseq_cove
   vcf_genind <- vcfR2genind(vcf)
   vcf_table <- as.data.frame(vcf_genind@tab)
   # Polarize "vcf_table" to remove repeat columns
-  polarized_vcf_table <- vcf_table[ , which(sapply(names(vcf_table),
-                                                   str_sub, -1, -1) == "0")]
+  polarized_vcf_table <- vcf_table[, which(sapply(names(vcf_table),
+                                                  str_sub, -1, -1) == "0")]
   # Subdivide VCF file by population
-  populations <- lapply(0:max(popinfo),
+  populations <- lapply(unique(popinfo),
                         function(i)
                         { polarized_vcf_table[which(popinfo==i),] })
   allele_counts <- lapply(1:num_of_pops,
@@ -62,47 +66,59 @@ get_pooled_folded_fs <- function(vcf_name, popinfo, haploid_counts, poolseq_cove
                                                 size=poolseq_coverage,
                                                 mode="coverage") } )
   # Convert frequencies to counts with one of two different methods.
-  if (method=="counts") {
+  if (method == "counts") {
     pooled_allele_counts <- lapply(1:num_of_pops,
                                    function(i)
-                                   { allele_count <- pooled_allele_freqs[[i]]$p.smpld * haploid_counts[i]
-                                     if (allele_count > 0 && allele_count < 1) {
-                                       return(1)
-                                     } else {
-                                       return(round(allele_count))
-                                     }
-                                   })
-  } else if () {
+                                   { lapply(pooled_allele_freqs[[i]]$p.smpld,
+                                            function(freq)
+                                            { count <- freq * haploid_counts[i]
+                                            if (count > 0 && count < 0) 1 else round(count)
+                                            }) } )
+  } else if (method == "probs") {
     pooled_allele_counts <- lapply(1:num_of_pops,
                                    function(i)
-                                   { return(rbinom(n=1,
+                                   { return(rbinom(n=length(pooled_allele_freqs[[i]]$p.smpld),
                                                    size=haploid_counts[i],
-                                                   prob=pooled_allele_freqs[[i]]$p.smpld)) }
+                                                   prob=pooled_allele_freqs[[i]]$p.smpld)) } )
   } else {
     stop("Error: 'method' argument must be either 'counts' or 'probs'.", call.=FALSE)
   }
   # Assemble site frequence spectrum
   fs <- array(0, sapply(haploid_counts, function(i) {i + 1}))
   for (i in 1:length(pooled_allele_counts[[1]])) {
-    coord <- sapply(pooled_allele_counts, function(x) { x[i] + 1 })
+    coord <- sapply(pooled_allele_counts, function(x) { x[[i]] + 1 })
     fs[rbind(coord)] <- fs[rbind(coord)] + 1
   }
   return(fs)
 }
 
-setwd("/scratch/djb3ve/data/first_models/")
+generate_pooled_sfs_from_pipeline_instruction <- function(instruction) {
+  vcf_file <- instruction["vcf_file"]
+  popinfo_eval_string <- instruction["popinfo_eval_string"]
+  haploid_counts_eval_string <- instruction["haploid_counts_eval_string"]
+  poolseq_depth <- as.numeric(instruction["poolseq_depth"])
 
-# Hands command line arguments
-args = commandArgs(trailingOnly=TRUE)
-if (length(args) < 4) { stop("Error: Five command line arguments must be supplied.", call.=FALSE) }
-vcf_name <- as.character(args[1])
-popinfo <- eval(parse(text=args[2]))
-haploid_counts <- eval(parse(text=args[3]))
-poolseq_coverage <- as.numeric(args[4])
+  # Create 10 replicates with random seeds 1 through 10
+  for (seed in 1:10) {
+    message(seed)
+    set.seed(seed)
+    fs <- get_pooled_folded_fs(paste(wd_string, "vcfs/", instruction["vcf_file"], sep=""),
+                               eval(parse(text=popinfo_eval_string)),
+                               eval(parse(text=haploid_counts_eval_string)),
+                               poolseq_depth)
+    output_file_name <- paste(wd_string, "serialized_pooled_sfss/",
+                              str_sub(vcf_file, end=-5),
+                              "_depth", poolseq_depth,
+                              "_seed", seed,
+                              "_pooled_sfs_serialized.txt", sep="")
+    write(c(dim(fs), "-----", rev(fs)), output_file_name, ncolumns=1)
+  }
+}
 
-output_file_name <- paste(str_sub(vcf_name, end=-5), "_pooled_sfs_serialized.txt", sep="")
+# Start of script
+# Load pipeline_insructions in as a table
+wd_string <- "/scratch/djb3ve/data/first_models/"
+setwd(wd_string)
+instructions <- read.table("pipeline_instructions.txt", header=TRUE)
 
-fs <- get_pooled_folded_fs(vcf_name, popinfo, haploid_counts, poolseq_coverage)
-# Serialize SFS for use in Python with moments
-setwd("/scratch/djb3ve/data/first_models/serialized_pooled_sfss/")
-write(c(dim(fs), "-----", rev(fs)), output_file_name, ncolumns=1)
+apply(instructions, 1, generate_pooled_sfs_from_pipeline_instruction)
