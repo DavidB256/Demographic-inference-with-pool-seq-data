@@ -18,6 +18,9 @@ sample.alleles <- function(p, size, mode=c("coverage", "individuals"), Ncensus=N
                 coverage={
                   # if length of 'size' equals '1' then generate target coverage values using the Poisson distribution, otherwise use values of 'size' directly
                   cov <- if(length(size) == 1) rpois(n=maxlen, lambda=size) else size
+                  # Change all zeros in 'cov' to ones. This prevents division by zero in the next line, but makes the assumption that all sites have
+                  # coverage of at least one. Note that sites with zero coverage are extremely rare, especially for larger values of 'size'.
+                  cov[which(cov==0)] <- 1
                   # sample allele frequencies from Binomial distribution based on 'cov' and 'p'
                   p.smpld <- rbinom(n=maxlen, size=cov, prob=p) / cov
                   # return results, including coverage values if they were drawn from a Poisson distribution
@@ -99,23 +102,23 @@ generate_pooled_sfs_from_pipeline_instruction <- function(instruction) {
   for (seed in 1:10) {
     message(seed)
     set.seed(seed)
-    fs <- get_pooled_folded_fs(paste("/vcfs/", vcf_file, sep=""),
+    fs <- get_pooled_folded_fs(paste(wd_string, "vcfs/", instruction["vcf_file"], sep=""),
                                eval(parse(text=popinfo_eval_string)),
                                eval(parse(text=haploid_counts_eval_string)),
                                poolseq_depth)
-    output_file_name <- paste("/serialized_pooled_sfss/",
-                              str_sub(vcf_name, end=-5),
+    output_file_name <- paste(wd_string, "serialized_pooled_sfss/",
+                              str_sub(vcf_file, end=-5),
                               "_depth", poolseq_depth,
-                              "_pooled_sfs_serialized.txt",
                               "_seed", seed,
-                              ".txt", sep="")
+                              "_pooled_sfs_serialized.txt", sep="")
     write(c(dim(fs), "-----", rev(fs)), output_file_name, ncolumns=1)
   }
 }
 
 # Start of script
 # Load pipeline_insructions in as a table
-setwd("/scratch/djb3ve/data/first_models/")
+wd_string <- "/scratch/djb3ve/data/first_models/"
+setwd(wd_string)
 instructions <- read.table("pipeline_instructions.txt", header=TRUE)
 
 apply(instructions, 1, generate_pooled_sfs_from_pipeline_instruction)
