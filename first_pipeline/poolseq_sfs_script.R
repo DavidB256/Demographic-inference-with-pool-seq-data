@@ -69,7 +69,7 @@ get_pooled_folded_fs <- function(vcf_name, popinfo, haploid_counts, poolseq_cove
                                    { lapply(pooled_allele_freqs[[i]]$p.smpld,
                                             function(freq)
                                             { count <- freq * haploid_counts[i]
-                                              if (count > 0 && count < 0) 1 else round(count)
+                                            if (count > 0 && count < 0) 1 else round(count)
                                             }) } )
   } else if (method == "probs") {
     pooled_allele_counts <- lapply(1:num_of_pops,
@@ -89,19 +89,33 @@ get_pooled_folded_fs <- function(vcf_name, popinfo, haploid_counts, poolseq_cove
   return(fs)
 }
 
+generate_pooled_sfs_from_pipeline_instruction <- function(instruction) {
+  vcf_file <- instruction["vcf_file"]
+  popinfo_eval_string <- instruction["popinfo_eval_string"]
+  haploid_counts_eval_string <- instruction["haploid_counts_eval_string"]
+  poolseq_depth <- as.numeric(instruction["poolseq_depth"])
+
+  # Create 10 replicates with random seeds 1 through 10
+  for (seed in 1:10) {
+    message(seed)
+    set.seed(seed)
+    fs <- get_pooled_folded_fs(paste("/vcfs/", vcf_file, sep=""),
+                               eval(parse(text=popinfo_eval_string)),
+                               eval(parse(text=haploid_counts_eval_string)),
+                               poolseq_depth)
+    output_file_name <- paste("/serialized_pooled_sfss/",
+                              str_sub(vcf_name, end=-5),
+                              "_depth", poolseq_depth,
+                              "_pooled_sfs_serialized.txt",
+                              "_seed", seed,
+                              ".txt", sep="")
+    write(c(dim(fs), "-----", rev(fs)), output_file_name, ncolumns=1)
+  }
+}
+
+# Start of script
+# Load pipeline_insructions in as a table
 setwd("/scratch/djb3ve/data/first_models/")
+instructions <- read.table("pipeline_instructions.txt", header=TRUE)
 
-# Hands command line arguments
-args = commandArgs(trailingOnly=TRUE)
-if (length(args) < 4) { stop("Error: Five command line arguments must be supplied.", call.=FALSE) }
-vcf_name <- as.character(args[1])
-popinfo <- eval(parse(text=args[2]))
-haploid_counts <- eval(parse(text=args[3]))
-poolseq_coverage <- as.numeric(args[4])
-
-output_file_name <- paste(str_sub(vcf_name, end=-5), "_depth", poolseq_coverage, "_pooled_sfs_serialized.txt", sep="")
-
-fs <- get_pooled_folded_fs(vcf_name, popinfo, haploid_counts, poolseq_coverage)
-# Serialize SFS for use in Python with moments
-setwd("/scratch/djb3ve/data/first_models/serialized_pooled_sfss/")
-write(c(dim(fs), "-----", rev(fs)), output_file_name, ncolumns=1)
+apply(instructions, 1, generate_pooled_sfs_from_pipeline_instruction)
