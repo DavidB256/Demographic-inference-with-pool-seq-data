@@ -2,6 +2,13 @@ import msprime
 import sys
 import os
 
+# Given the parameters at the bottom of this script and the demography model described
+# in main(), this script writes VCF files replicates of VCF files at different sample sample sizes
+# and with different random seeds with msprime and writes corresponding popinfo files
+# into the "second_pipeline" directory.
+
+# Objects of this class have demography objects and metadata for simulation and
+# the pipeline as instance variables
 class Demography_plus:
     # Values for mu and rho are those of D. melanogaster
     def __init__(self, dem, dem_name, samples,
@@ -38,38 +45,16 @@ class Demography_plus:
     # Writes "num_of_replicates" many VCF files created from tree sequences created by
     # "get_ts_with_muts" with different random seeds. Writes the popinfo file if it
     # does not yet exist.
-    def write_vcf_and_popinfo(self, num_of_replicates, output_dir, instructions_file, poolseq_depths):
+    def write_vcf_and_popinfo(self, num_of_replicates, output_dir):
         # Need to iterate with 1-based counting for seeds because a seed of 0 is invalid
         for seed in range(1, num_of_replicates+1):
             with open(f"{output_dir}vcfs/{self.dem_name}_seed{seed}.vcf", "w") as f:
                 self.get_ts_with_muts(random_seed=seed).write_vcf(f)
-                self.append_pipeline_instructions(seed, instructions_file, poolseq_depths)
 
         if not os.path.exists(f"{output_dir}popinfos/{self.dem_name}_popinfo.txt"):
             self.write_popinfo(f"{output_dir}popinfos/{self.dem_name}_popinfo.txt")
 
-    # Add lines to the pipeline instructions file to be read into poolseq_sfs_script.R
-    # by its wrapper, one line per level of pool-seq depth
-    def append_pipeline_instructions(self, seed, instructions_file, poolseq_depths):
-        # Format popinfo and haploid_counts as R vectors to be evaluated in the R script
-        popinfo_r_vector = "rep(c("
-        for i in range(len(self.samples)):
-            popinfo_r_vector += "%s," % i
-        popinfo_r_vector = popinfo_r_vector[:-1] + "),times=c("
-        haploid_counts_r_vector = "c("
-        for sample in self.samples:
-            popinfo_r_vector += "%d," % self.samples[sample]
-            haploid_counts_r_vector += "%d," % (self.samples[sample] * self.ploidy)
-        popinfo_r_vector = popinfo_r_vector[:-1] + "))"
-        haploid_counts_r_vector = haploid_counts_r_vector[:-1] + ")"
-
-        with open(instructions_file, "a") as f:
-            for poolseq_depth in poolseq_depths:
-                f.write(f"{self.dem_name}_seed{seed}.vcf" + \
-                        "\t" + popinfo_r_vector + "\t" + haploid_counts_r_vector + \
-                        "\t" + str(poolseq_depth) + "\t" + self.dem_name + "_popinfo.txt\n")
-
-def main(dem_params, output_dir, instructions_file, sample_sizes, poolseq_depths, num_of_replicates):
+def main(dem_params, output_dir, sample_sizes, num_of_replicates):
     # Make necessary subdirectories "vcfs" and "popinfos" of "output_dir" if they do not already exists
     for subdirectory in ["vcfs", "popinfos"]:
         if not os.path.exists(output_dir + subdirectory):
@@ -78,7 +63,7 @@ def main(dem_params, output_dir, instructions_file, sample_sizes, poolseq_depths
     # Iterate through sample sizes, generating "num_of_replicates" many VCF files per sample size
     for sample_size in sample_sizes:
         print("Starting iteration with sample size %d." % sample_size)
-        # two_pop_split
+        # Create Demography_plus object for two_pop_split model
         two_pop_split_demography = msprime.Demography()
         two_pop_split_demography.add_population(name="ancestral",
                                                 initial_size=dem_params["ancestral_population_size"])
@@ -92,7 +77,7 @@ def main(dem_params, output_dir, instructions_file, sample_sizes, poolseq_depths
         dem_plus = Demography_plus(two_pop_split_demography, f"two_pop_split_demography_n{sample_size}",
                                    {"pop0": sample_size, "pop1": sample_size},
                                    dem_params["mu"], dem_params["rho"], dem_params["seq_len"], dem_params["ploidy"])
-        dem_plus.write_vcf_and_popinfo(num_of_replicates, output_dir, instructions_file, poolseq_depths)
+        dem_plus.write_vcf_and_popinfo(num_of_replicates, output_dir)
 
 # Demography parameters
 dem_params = {"ancestral_population_size": 2e5,
@@ -106,10 +91,7 @@ dem_params = {"ancestral_population_size": 2e5,
 
 # Procedural variables
 output_dir = "/scratch/djb3ve/data/second_pipeline/"
-instructions_file = output_dir + "pipeline_instructions.txt"
-#sample_sizes = [10, 50, 100, 200, 400]
-sample_sizes = [200, 400]
-poolseq_depths = [10, 40, 70, 100]
+sample_sizes = [10, 50, 100, 200, 400]
 num_of_replicates = 3
 
-main(dem_params, output_dir, instructions_file, sample_sizes, poolseq_depths, num_of_replicates)
+main(dem_params, output_dir, sample_sizes, num_of_replicates)

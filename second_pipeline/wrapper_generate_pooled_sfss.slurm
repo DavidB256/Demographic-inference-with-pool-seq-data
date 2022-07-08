@@ -1,21 +1,17 @@
 #!/bin/bash
 
-#SBATCH --mem 128G
-#SBATCH --time 10:00:00
-#SBATCH --partition largemem
+#SBATCH --mem 1G
+#SBATCH --time 1:00:00
+#SBATCH --partition standard
 #SBATCH --account biol4585j-yey2sn
 #SBATCH -c 1
-#SBATCH -e /scratch/djb3ve/data/r_slurm_errors/slurm-%a.err
-#SBATCH --output /scratch/djb3ve/data/r_slurm_output/slurm-%a.out
-
-module load gcc/7.1.0 openmpi/3.1.4 intel/18.0 intelmpi/18.0 R/4.1.1
+#SBATCH -e /scratch/djb3ve/data/slurm_errors/slurm-%a.err
+#SBATCH --output /scratch/djb3ve/data/slurm_output/slurm-%a.out
 
 options_file="/scratch/djb3ve/data/second_pipeline/pipeline_instructions.txt"
-script_file="/scratch/djb3ve/Demographic-inference-with-Pool-seq-data/second_pipeline/generate_pooled_sfss.R"
+script_file="/scratch/djb3ve/Demographic-inference-with-Pool-seq-data/second_pipeline/generate_pooled_sfss.py"
+num_of_replicates=3
 
-# OPTS = [vcf_file, popinfo_eval_string, haploid_counts_eval_string, poolseq_depth, popinfo_file]
-# The last argument is not considered by this R script. It only exists for use of moments_output
-# later down the pipeline.
+# OPTS = [vcf_name, popinfo_name, haploid_counts_eval_string, poolseq_depth, rounding_method, ploidy]
 OPTS=$(sed -n "${SLURM_ARRAY_TASK_ID}"p ${options_file})
-
-Rscript $script_file $OPTS
+python $script_file $OPTS $num_of_replicates
