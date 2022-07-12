@@ -109,7 +109,7 @@ def main(vcf_file, popinfo_file, haploid_counts, poolseq_depth, output_file_with
 np.set_printoptions(suppress=True)
 
 # Set up working environment
-working_dir = "/scratch/djb3ve/data/second_pipeline/"
+working_dir = "/scratch/djb3ve/Demographic-inference-with-pool-seq-data/data/second_pipeline/"
 for subdir in ["vcfs/", "serialized_pooled_sfss/"]:
     if not os.path.exists(working_dir + subdir):
         os.makedirs(working_dir + subdir)

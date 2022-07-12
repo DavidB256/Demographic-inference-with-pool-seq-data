@@ -7,7 +7,7 @@ import re
 poolseq_depths = [10, 40, 70, 100]
 rounding_method = "counts"
 ploidy = 2
-working_dir = "/scratch/djb3ve/data/second_pipeline/"
+working_dir = "/scratch/djb3ve/Demographic-inference-with-pool-seq-data/data/second_pipeline/"
 output_file = "pipeline_instructions.txt"
 
 with open(working_dir + output_file, "w") as f:

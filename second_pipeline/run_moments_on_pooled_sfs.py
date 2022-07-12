@@ -58,7 +58,7 @@ def main(demography_model, sfs_file, sfs_name_params, num_of_optimization_repeat
         return output_string
 
 # Environment variables
-output_file = "/scratch/djb3ve/data/second_pipeline/moments_output.txt"
+output_file = "/scratch/djb3ve/Demographic-inference-with-pool-seq-data/data/second_pipeline/moments_output.txt"
 # Create output file and write its header, if it does not already exist
 if not os.path.exists(output_file):
     with open(output_file, "w") as f:
@@ -76,9 +76,9 @@ if not os.path.exists(output_file):
                         "mig_rate_est"]
         header_string = ""
         for column_name in column_names:
-            header_string += column_name + "\t"
+            header_string += column_name + " \t"
         f.write(header_string + "\n")
-input_dir = "/scratch/djb3ve/data/second_pipeline/sfss/"
+input_dir = "/scratch/djb3ve/Demographic-inference-with-pool-seq-data/data/second_pipeline/sfss/"
 
 # Handle command line arguments
 sfs_name = sys.argv[1]

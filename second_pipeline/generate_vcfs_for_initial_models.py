@@ -90,7 +90,7 @@ dem_params = {"ancestral_population_size": 2e5,
               "ploidy": 2}
 
 # Procedural variables
-output_dir = "/scratch/djb3ve/data/second_pipeline/"
+output_dir = "/scratch/djb3ve/Demographic-inference-with-pool-seq-data/data/second_pipeline/"
 sample_sizes = [10, 50, 100, 200, 400]
 num_of_replicates = 3
 

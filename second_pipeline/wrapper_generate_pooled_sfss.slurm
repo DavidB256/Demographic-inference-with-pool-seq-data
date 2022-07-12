@@ -8,7 +8,7 @@
 #SBATCH -e /scratch/djb3ve/data/slurm_errors/slurm-%a.err
 #SBATCH --output /scratch/djb3ve/data/slurm_output/slurm-%a.out
 
-options_file="/scratch/djb3ve/data/second_pipeline/pipeline_instructions.txt"
+options_file="/scratch/djb3ve/Demographic-inference-with-pool-seq-data/data/second_pipeline/pipeline_instructions.txt"
 script_file="/scratch/djb3ve/Demographic-inference-with-Pool-seq-data/second_pipeline/generate_pooled_sfss.py"
 num_of_replicates=3
 
