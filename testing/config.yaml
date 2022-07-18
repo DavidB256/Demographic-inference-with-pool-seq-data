@@ -1,4 +1,0 @@
-# This will be read into all Python files in next iteration of pipeline
-mutation_rate: 2.9e-9
-recombination_rate: 1.25e-7
-vcf_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/data/third_pipeline/vcfs/

@@ -1,24 +1,2 @@
-# Config file for third_pipeline
-mutation_rate: 2.9e-9
-recombination_rate: 1.25e-7
-ancestral_population_size": 2e5
-split_population_size:
-t_split: 1000
-mig_rate: 1e-5
-seq_len: 1e6
-ploidy: 2
-poolseq_depths:
-  - 10
-  - 30
-  - 50
-  - 70
-  - 90
-sample_sizes:
-  - 10
-  - 50
-  - 100
-  - 200
-data_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/data/third_pipeline/
-num_of_demography_sim_replicates: 5
-num_of_poolseq_noising_replicates: 5
-num_of_optimization_replicates: 3
+# This will be read into all Python files in next iteration of pipeline
+mutation_rate
