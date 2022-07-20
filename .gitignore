@@ -1,1 +1,11 @@
-#empty for now
+*.err
+*.out
+*.npy
+*.vcf
+*data/
+*slurm_errors/
+*slurm_output/
+*errors_slurm/
+*output_slurm/
+Kerics_msprime_scripts/
+Python_scripting/

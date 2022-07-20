@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --mem 9G
-#SBATCH --time 1-00:00:00
+#SBATCH --time 10:00:00
 #SBATCH --partition standard
 #SBATCH --account biol4585j-yey2sn
 #SBATCH -c 1
@@ -20,6 +20,6 @@ mutation_rate=0.0000000029
 genome_length=1000000
 ploidy=2
 
-# OPTS = [vcf_name, popinfo_name, haploid_counts_eval_string, poolseq_depth, rounding_method, ploidy]
+# OPTS = [sfs_name]
 OPTS=$(sed -n "${SLURM_ARRAY_TASK_ID}"p ${options_file})
 python $script_file $OPTS $num_of_optimization_repeats $mutation_rate $genome_length $ploidy

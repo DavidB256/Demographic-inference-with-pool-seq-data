@@ -35,7 +35,7 @@ def main(demography_model, vcf_file, popinfo_file, vcf_name_params, num_of_optim
             popt = moments.Inference.optimize(params, sfs, two_pop_split,
                                               lower_bound=lower_bound,
                                               upper_bound=upper_bound,
-                                              maxiter=10, verbose=100,
+                                              maxiter=10, verbose=0,
                                               multinom=True)
             model = two_pop_split(popt, ns)
             log_likelihood = moments.Inference.ll_multinom(model, sfs)
@@ -46,8 +46,8 @@ def main(demography_model, vcf_file, popinfo_file, vcf_name_params, num_of_optim
         max_log_likelihood = sorted(moments_output_dict)[-1]
         output_string += str(max_log_likelihood) + "\t"
         # Convert units from moments units, which depend on theta, mutation rate, and genome length, to conventional units
+        # optimal_moments_output = [theta, nu1, nu2, T, m]
         optimal_moments_output = moments_output_dict[max_log_likelihood]
-        print(optimal_moments_output)
         theta = optimal_moments_output[0]
         conversion_coeff = theta / (4 * mutation_rate * genome_length)
         optimal_moments_output[1] *= conversion_coeff
