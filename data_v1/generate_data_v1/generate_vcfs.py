@@ -38,6 +38,6 @@ if __name__ == "__main__":
                                       ploidy=yd["dem_params"]["ploidy"],
                                       random_seed=seed)
             mts = msprime.sim_mutations(ts, rate=yd["dem_params"]["mutation_rate"], random_seed=seed)
-            vcf_file = f"{yd['pipeline_params']['data_dir']}vcfs/n{sample_size}_mseed{seed}.vcf"
+            vcf_file = f"{yd['pipeline_params']['output_dir']}vcfs/n{sample_size}_mseed{seed}.vcf"
             with open(vcf_file, "w") as f:
                 mts.write_vcf(f)

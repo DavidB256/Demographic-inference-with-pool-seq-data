@@ -8,7 +8,7 @@
 #SBATCH -e /scratch/djb3ve/Demographic-inference-with-pool-seq-data/third_pipeline/errors_slurm/slurm-%a.err
 #SBATCH --output /scratch/djb3ve/Demographic-inference-with-pool-seq-data/third_pipeline/output_slurm/slurm-%a.out
 
-options_file="/scratch/djb3ve/Demographic-inference-with-pool-seq-data/third_pipeline/instructions/instructions_for_run_abc.txt"
+options_file="/scratch/djb3ve/Demographic-inference-with-pool-seq-data/third_pipeline/instructions_for_run_abc.txt"
 script_file="/scratch/djb3ve/Demographic-inference-with-pool-seq-data/third_pipeline/run_abc.py"
 
 OPTS=$(sed -n "${SLURM_ARRAY_TASK_ID}"p ${options_file})

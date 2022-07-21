@@ -152,6 +152,6 @@ if __name__ == "__main__":
         haploid_counts = [sample_size * yd["dem_params"]["ploidy"]] * 2
         sfs = get_folded_sfs(vcf_file, popinfo_file, poolseq_depth, haploid_counts)
         # The file extension is not included in "output_file" because "np.save" automatically adds the ".npy" extension.
-        output_file = yd["pipeline_params"]["data_dir"] + "sfss/" + vcf_name[:-4] + "_depth" + str(poolseq_depth) + "_pseed" + str(seed)
+        output_file = yd["pipeline_params"]["output_dir"] + "sfss/" + vcf_name[:-4] + "_depth" + str(poolseq_depth) + "_pseed" + str(seed)
         # Serialize SFS
         np.save(output_file, sfs)
