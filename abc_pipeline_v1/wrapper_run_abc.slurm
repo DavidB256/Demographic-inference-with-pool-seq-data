@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --mem 9G
-#SBATCH --time 12:00:00
+#SBATCH --time 1-00:00:00
 #SBATCH --partition standard
 #SBATCH --account biol4585j-yey2sn
 #SBATCH -c 1

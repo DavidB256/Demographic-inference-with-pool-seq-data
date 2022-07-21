@@ -103,9 +103,9 @@ def get_folded_sfs(vcf_file, popinfo_file, poolseq_depth, haploid_counts):
             print("Error: Invalid rounding method.")
             sys.exit()
     else:
-        allele_counts_by_population = pd.DataFrame()
-        for i, pop_allele_counts in enumerate(allele_counts_by_population):
-            allele_counts_by_population[i] = pop_allele_counts
+        allele_counts_by_population = pd.DataFrame(allele_counts_by_population).transpose()
+
+    print(allele_counts_by_population)
 
     # Fold allele counts so that the minor allele is counted as the alternate allele at each site.
     # I am unsure of how SFSs are constructed for polyploidal populations, so this might not work for

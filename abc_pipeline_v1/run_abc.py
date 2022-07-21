@@ -63,6 +63,8 @@ class Sfs(ProbabilisticModel):
         return 2
 
 if __name__ == "__main__":
+    print("Starting.")
+
     # Handle command line arguments
     sfs_name = sys.argv[1]
     # Use regex to extract numbers "sfs_name" into a list
@@ -70,6 +72,7 @@ if __name__ == "__main__":
     observed_sfs_file = yd["pipeline_params"]["data_dir"] + "sfss/" + sfs_name
     sample_size = int(sfs_name_numbers[0])
     obs = [np.load(observed_sfs_file)]
+    print(obs[0][0])
 
     # Parameters to be estimated by ABC
     log_n_1 = Uniform(yd["abc_params"]["prior_bounds"]["log_n_1"], name="log_n_1")
@@ -89,27 +92,36 @@ if __name__ == "__main__":
     print("Starting ABC run.")
 
     # Run ABC
-    journal = sampler.sample([obs], steps=5, epsilon_init=np.array([1e9]), n_samples=100)
+    journal = sampler.sample([obs],
+                             steps=yd["abc_params"]["steps"],
+                             epsilon_init=np.array(yd["abc_params"]["epsilon_init"]),
+                             n_samples=yd["abc_params"]["n_samples"],
+                             epsilon_percentile=yd["abc_params"]["epsilon_percentile"])
 
     # Extract statistics from journal object
     means = journal.posterior_mean()
-    covariance = journal.posterior_cov()[0]
+    cov_mat = journal.posterior_cov()[0]
+    # The determinant of a covariance matrix is the generalized variance
+    cov_mat_det = np.linalg.det(cov_mat)
+
+    # Print to Slurm output file
+    print(journal.get_parameters())
+    print(means)
+    print(cov_mat_det)
+    print(cov_mat)
+    print(journal.get_weights())
 
     # Write to output file
     output_list = sfs_name_numbers
     for mean in means:
         output_list.append(str(means[mean]))
-    for i in range(len(covariance)):
-        output_list.append(str(covariance[i][i]))
+    for i in range(len(cov_mat)):
+        output_list.append(str(cov_mat[i][i]))
+    output_list.append(str(cov_mat_det))
     with open(yd["pipeline_params"]["data_dir"] + yd["pipeline_params"]["output_file_name"], "a") as f:
         for output in output_list:
             f.write(output + "\t")
         f.write("\n")
-
-
-
-
-
 
 
 
