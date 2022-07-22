@@ -1,0 +1,1 @@
+sample_size 	mseed 	depth 	pseed 	max_lltheta 	n_1_est 	n_2_est 	t_split_est 	mig_rate_est 	

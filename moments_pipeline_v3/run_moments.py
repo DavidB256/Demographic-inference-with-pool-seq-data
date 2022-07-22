@@ -14,22 +14,21 @@ def two_pop_split(params, ns):
     return moments.Demographics2D.split_mig(params, ns, pop_ids=["pop0", "pop1"])
 
 def initialize_output_file(output_file):
-    if not os.path.exists(output_file):
-        with open(output_file, "w") as f:
-            column_names = ["sample_size",
-                            "mseed",
-                            "depth",
-                            "pseed",
-                            "max_ll"
-                            "theta",
-                            "n_1_est",
-                            "n_2_est",
-                            "t_split_est",
-                            "mig_rate_est"]
-            header_string = ""
-            for column_name in column_names:
-                header_string += column_name + " \t"
-            f.write(header_string + "\n")
+    with open(output_file, "w") as f:
+        column_names = ["sample_size",
+                        "mseed",
+                        "depth",
+                        "pseed",
+                        "max_ll"
+                        "theta",
+                        "n_1_est",
+                        "n_2_est",
+                        "t_split_est",
+                        "mig_rate_est"]
+        header_string = ""
+        for column_name in column_names:
+            header_string += column_name + " \t"
+        f.write(header_string + "\n")
 
 if __name__ == "__main__":
     # Handle command line arguments
@@ -37,8 +36,9 @@ if __name__ == "__main__":
     # Use regex to extract numbers from string "sfs_file".
     sfs_name_params = re.findall(r'\d+', sfs_name)
 
-    output_file = yd["pipeline_params"]["output_dir"] + yd["pipeline_params"]["output_file_name"]
-    initialize_output_file(output_file)
+    # Create output file and write its header if it does not already exist
+    if not os.path.exists(yd["pipeline_params"]["output_file"]):
+        initialize_output_file(yd["pipeline_params"]["output_file"])
 
     sfs = moments.Spectrum(np.load(yd["pipeline_params"]["data_dir"] + "sfss/" + sfs_name),
                            mask_corners=True, pop_ids=["pop0", "pop1"])
@@ -78,9 +78,13 @@ if __name__ == "__main__":
     optimal_moments_output[4] /= 2 * conversion_coeff
 
     # Export data
-    output_list += optimal_moments_output
-    for output in output_list:
-        print(output, end="\t")
+    for output in optimal_moments_output:
+        output_list.append(str(optimal_moments_output))
+    with open(yd["pipeline_params"]["output_file"], "a") as f:
+        for output in output_list:
+            f.write(output + "\t")
+            print(output, end="\t")
+        f.write("\n")
 
 
 

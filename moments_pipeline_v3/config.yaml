@@ -10,8 +10,7 @@ dem_params:
   ploidy: !!int 2
 pipeline_params:
   data_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/data_v1/
-  output_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/moments_pipeline_v3/output/
-  output_file_name: moments_output1.txt
+  output_file: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/inference_output/moments_output1.txt
 moments_params:
   lower_bound: [!!float 1e-4, !!float 1e-4, !!float 1e-4, !!float 1e-4]
   upper_bound: [10, 10, 10, 10]
