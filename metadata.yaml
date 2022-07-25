@@ -1,0 +1,141 @@
+data_v1:
+  dir: root
+  abstract: First good batch of output data. Produced with "counts" rounding method
+  on allele frequencies obtained from SFS (first method for SFS noising). Directories
+  in config listing are outdated.
+  date_created: 2022-07-21
+  config_file:
+    dem_params:
+      mutation_rate: !!float 2.9e-9
+      recombination_rate: !!float 1.25e-17
+      ancestral_population_size: !!float 2e5
+      split_population_size: !!float 1e5
+      t_split: !!float 1e3
+      mig_rate: !!float 1e-5
+      seq_len: !!float 1e6
+      ploidy: !!int 2
+    pipeline_params:
+      poolseq_depths: [10, 30, 50, 70, 90]
+      sample_sizes: [10, 50, 100, 200, 500]
+      data_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/data/
+      num_of_demography_sim_replicates: !!int 5
+      num_of_poolseq_noising_replicates: !!int 5
+      rounding_method: counts
+      ignore_multiallelic_site: !!bool False
+
+abc_output1.txt:
+  dir: inference_output/
+  abstract: First good ABC run. Uses ABCpy's PMCABC algorithm on data_v1 with log-scaled
+  parameters. 551 of 650 jobs completed. Directories in config listing are outdated.
+  date_created: 2022-07-21
+  slurm_params:
+    mem_(GB): 9
+    max_time: 1-00:00:00
+    partition: standard
+    cores: 1
+    num_of_jobs_in_array: 650
+  config_file:
+    dem_params:
+      mutation_rate: !!float 2.9e-9
+      recombination_rate: !!float 1.25e-17
+      ancestral_population_size: !!float 2e5
+      split_population_size: !!float 1e5
+      t_split: !!float 1e3
+      mig_rate: !!float 1e-5
+      seq_len: !!float 1e6
+      ploidy: !!int 2
+    pipeline_params:
+      poolseq_depths: [10, 30, 50, 70, 90]
+      sample_sizes: [10, 50, 100, 200, 500]
+      data_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/data/
+      output_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/abc_pipeline_v1/output/
+      output_file_name: abc_output2_steps6_bounds4.txt
+      num_of_demography_sim_replicates: !!int 5
+      num_of_poolseq_noising_replicates: !!int 5
+      rounding_method: counts
+      ignore_multiallelic_site: !!bool False
+    abc_params:
+      steps: !!int 5
+      n_samples: !!int 10
+      epsilon_percentile: !!float 0.1
+      epsilon_init: [!!float 1e10]
+      prior_bounds:
+        log_n_1: [[0], [7]]
+        log_n_2: [[0], [7]]
+        log_t_split: [[0], [7]]
+        log_m: [[-7], [0]]
+
+abc_output2_steps6_bounds4.txt:
+  dir: inference_output/
+  abstract: Second good ABC run on data_v1. Same as abc_output1.txt, but with one
+  additional step per job (6) and shorter prior bound intervals (length 4), each
+  centered at the true parameter value. Directories in config listing are outdated.
+  date_created: 2022-07-21
+  slurm_params:
+    mem_(GB): 9
+    max_time: !!timestamp 1-00:00:00
+    partition: standard
+    cores: 1
+    num_of_jobs_in_array: 650
+  config_file:
+    dem_params:
+      mutation_rate: !!float 2.9e-9
+      recombination_rate: !!float 1.25e-17
+      ancestral_population_size: !!float 2e5
+      split_population_size: !!float 1e5
+      t_split: !!float 1e3
+      mig_rate: !!float 1e-5
+      seq_len: !!float 1e6
+      ploidy: !!int 2
+    pipeline_params:
+      poolseq_depths: [10, 30, 50, 70, 90]
+      sample_sizes: [10, 50, 100, 200, 500]
+      data_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/data/
+      output_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/abc_pipeline_v1/output/
+      output_file_name: abc_output2_steps6_bounds4.txt
+      num_of_demography_sim_replicates: !!int 5
+      num_of_poolseq_noising_replicates: !!int 5
+      rounding_method: counts
+      ignore_multiallelic_site: !!bool False
+    abc_params:
+      steps: !!int 6
+      n_samples: !!int 10
+      epsilon_percentile: !!float 0.1
+      epsilon_init: [!!float 1e10]
+      prior_bounds:
+        log_n_1: [[3], [7]]
+        log_n_2: [[3], [7]]
+        log_t_split: [[1], [5]]
+        log_m: [[-7], [-3]]
+
+moments_output1.txt:
+  dir: inference_output/
+  abstract: First good moments run on data_v1. Uses moments.Demographics2D.split_mig
+  as model. 516 of 650 jobs completed. Directories in config listing are outdated.
+  date_created: 2022-07-21
+  col_names: [sample_size, mseed, depth, pseed, log_likelihood, theta, n1_est, n2_est, t_est, m_est]
+  slurm_params:
+    mem_(GB): 9
+    max_time: !!timestamp 1-00:00:00
+    partition: standard
+    cores: 1
+    num_of_jobs_in_array: 650
+  config_file:
+    dem_params:
+      mutation_rate: !!float 2.9e-9
+      recombination_rate: !!float 1.25e-17
+      ancestral_population_size: !!float 2e5
+      split_population_size: !!float 1e5
+      t_split: !!float 1e3
+      mig_rate: !!float 1e-5
+      seq_len: !!float 1e6
+      ploidy: !!int 2
+    pipeline_params:
+      data_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/data_v1/
+      output_file: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/inference_output/moments_output1.txt
+    moments_params:
+      lower_bound: [!!float 1e-4, !!float 1e-4, !!float 1e-4, !!float 1e-4]
+      upper_bound: [10, 10, 10, 10]
+      max_iter: 100
+      num_of_inference_repeats: 5
+

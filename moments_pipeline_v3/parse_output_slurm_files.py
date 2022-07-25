@@ -10,8 +10,9 @@ with open("config.yaml", "r") as f:
 data_dir = "/scratch/djb3ve/Demographic-inference-with-pool-seq-data/moments_pipeline_v3/output_slurm/"
 output_file = yd["pipeline_params"]["output_file"]
 
-with open(output_file, "a+") as g:
+with open(output_file, "w") as g:
     for file in os.listdir(data_dir):
-        with open(file, "r") as f:
+        print(file)
+        with open(data_dir + file, "r") as f:
             line = f.readline()
-        g.write(line)
+        g.write(line + "\n")
