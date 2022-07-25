@@ -72,7 +72,6 @@ if __name__ == "__main__":
     observed_sfs_file = yd["pipeline_params"]["data_dir"] + "sfss/" + sfs_name
     sample_size = int(sfs_name_numbers[0])
     obs = [np.load(observed_sfs_file)]
-    print(obs[0][0])
 
     # Parameters to be estimated by ABC
     log_n_1 = Uniform(yd["abc_params"]["prior_bounds"]["log_n_1"], name="log_n_1")

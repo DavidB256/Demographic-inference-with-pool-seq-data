@@ -23,6 +23,31 @@ data_v1:
       rounding_method: counts
       ignore_multiallelic_site: !!bool False
 
+data_v2:
+  dir: root
+  abstract: SFSs constructed with moments' Misc.make_data_dict_vcf() and Spectrum.from_data_dict()
+  functions from the VCF and popinfo files from data_v1 at all levels of sample
+  size except n=500 (the largest, for which moments inference is egregiously slow).
+  Pool-seq noise applied directly to SFSs output by moments, as opposed to being
+  applied to allele frequencies in VCF files, like in data_v1.
+  date_created: 2022-07-25
+  dem_params:
+    mutation_rate: !!float 2.9e-9
+    recombination_rate: !!float 1.25e-17
+    ancestral_population_size: !!float 2e5
+    split_population_size: !!float 1e5
+    t_split: !!float 1e3
+    mig_rate: !!float 1e-5
+    seq_len: !!float 1e6
+    ploidy: !!int 2
+  pipeline_params:
+    sample_sizes: [10, 50, 100, 200]
+    poolseq_depths: [10, 30, 50, 70, 90]
+    data_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/data_v1
+    num_of_demography_sim_replicates: !!int 5
+    num_of_poolseq_noising_replicates: !!int 5
+    rounding_method: counts
+
 abc_output1.txt:
   dir: inference_output/
   abstract: First good ABC run. Uses ABCpy's PMCABC algorithm on data_v1 with log-scaled
@@ -111,7 +136,8 @@ abc_output2_steps6_bounds4.txt:
 moments_output1.txt:
   dir: inference_output/
   abstract: First good moments run on data_v1. Uses moments.Demographics2D.split_mig
-  as model. 516 of 650 jobs completed. Directories in config listing are outdated.
+  as model. Not run on any 500x500 SFSs for  516 of 650 jobs completed. All jobs
+  at sample_size=500 failed. Directories in config listing are outdated.
   date_created: 2022-07-21
   col_names: [sample_size, mseed, depth, pseed, log_likelihood, theta, n1_est, n2_est, t_est, m_est]
   slurm_params:
@@ -119,7 +145,7 @@ moments_output1.txt:
     max_time: !!timestamp 1-00:00:00
     partition: standard
     cores: 1
-    num_of_jobs_in_array: 650
+    num_of_jobs_in_array: 520
   config_file:
     dem_params:
       mutation_rate: !!float 2.9e-9

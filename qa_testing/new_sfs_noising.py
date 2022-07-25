@@ -13,7 +13,8 @@ def print_sfs(sfs):
         print()
     print()
 
-def add_noise_to_sfs(sfs, poolseq_depth, haploid_counts, method="counts"):
+def add_noise_to_sfs(sfs, poolseq_depth, method="counts"):
+    haploid_counts = [i + 1 for i in sfs.shape]
     noised_sfs = np.zeros(sfs.shape)
     it  = np.nditer(sfs, flags=['multi_index'])
 
@@ -34,8 +35,6 @@ def add_noise_to_sfs(sfs, poolseq_depth, haploid_counts, method="counts"):
                     pooled_counts = np.round(pooled_counts).astype(int)
             elif method == "probs":
                 pooled_counts = np.random.binomial(n=haploid_counts, p=pooled_freqs, size=sfs.ndim)
-                print(pooled_counts)
-                print()
             else:
                 raise "Unrecognized rounding method."
 
@@ -76,7 +75,6 @@ def generate_sfs_from_msprime(sample_size):
     return (sfs * yd["dem_params"]["seq_len"]).astype(int)
 
 sample_size = 10
-haploid_counts = [sample_size * yd["dem_params"]["ploidy"]] * 2
 output_file = "/scratch/djb3ve/Demographic-inference-with-pool-seq-data/qa_testing/new_sfs_noising_dists_probs.txt"
 
 with open(output_file, "a") as f:
@@ -85,7 +83,7 @@ with open(output_file, "a") as f:
         for i in range(40):
             print("Starting iteration %d." % i)
             sfs = generate_sfs_from_msprime(sample_size)
-            noised_sfs = add_noise_to_sfs(sfs, depth, haploid_counts, "probs")
+            noised_sfs = add_noise_to_sfs(sfs, depth, "probs")
 
             dist = np.linalg.norm(sfs - noised_sfs)
 

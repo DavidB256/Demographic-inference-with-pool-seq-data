@@ -7,7 +7,7 @@ with open("config.yaml", "r") as f:
     yd = yaml.safe_load(f)
 
 if __name__ == "__main__":
-    # Make necessary subdirectories "vcfs" and "popinfos" of "output_dir" if they do not already exist
+    # Make necessary subdirectories "vcfs" and "popinfos" of "data_dir" if they do not already exist
     for subdirectory in ["vcfs/", "popinfos/"]:
         if not os.path.exists(yd["pipeline_params"]["data_dir"] + subdirectory):
             os.makedirs(yd["pipeline_params"]["data_dir"] + subdirectory)
@@ -38,6 +38,10 @@ if __name__ == "__main__":
                                       ploidy=yd["dem_params"]["ploidy"],
                                       random_seed=seed)
             mts = msprime.sim_mutations(ts, rate=yd["dem_params"]["mutation_rate"], random_seed=seed)
-            vcf_file = f"{yd['pipeline_params']['output_dir']}vcfs/n{sample_size}_mseed{seed}.vcf"
-            with open(vcf_file, "w") as f:
+
+            # Serialize TreeSequence "mts"
+            with open(f"{yd['pipeline_params']['data_dir']}tss/n{sample_size}_mseed{seed}.ts", "w") as f:
+                mts.dump(f)
+            # Export VCF created from TreeSequence "mts"
+            with open(f"{yd['pipeline_params']['data_dir']}vcfs/n{sample_size}_mseed{seed}.vcf", "w") as f:
                 mts.write_vcf(f)

@@ -1,4 +1,4 @@
-# Config file for generate_data_v1, which generates 650 SFSs of the two_pop_split
+# Config file for generate_data_v2, which generates 650 SFSs of the two_pop_split
 # model
 dem_params:
   mutation_rate: !!float 2.9e-9
@@ -10,10 +10,9 @@ dem_params:
   seq_len: !!float 1e6
   ploidy: !!int 2
 pipeline_params:
+  sample_sizes: [10, 50, 100, 200]
   poolseq_depths: [10, 30, 50, 70, 90]
-  sample_sizes: [10, 50, 100, 200, 500]
-  data_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/data_v1/
+  data_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/data_v1
   num_of_demography_sim_replicates: !!int 5
   num_of_poolseq_noising_replicates: !!int 5
   rounding_method: counts
-  ignore_multiallelic_site: !!bool False
