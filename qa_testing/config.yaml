@@ -1,5 +1,4 @@
-# Config file for abc_pipeline_v1, which uses ABCpy's PMCABC algorithm for inference
-# on two_pop_split demography models
+# Config file for QA test "test_sfs_generation.py"
 dem_params:
   mutation_rate: !!float 2.9e-9
   recombination_rate: !!float 1.25e-17
@@ -7,7 +6,7 @@ dem_params:
   split_population_size: !!float 1e5
   t_split: !!float 1e3
   mig_rate: !!float 1e-5
-  seq_len: !!float 1e6
+  seq_len: !!float 1e5
   ploidy: !!int 2
 pipeline_params:
   poolseq_depths: [10, 30, 50, 70, 90]

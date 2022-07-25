@@ -105,8 +105,6 @@ def get_folded_sfs(vcf_file, popinfo_file, poolseq_depth, haploid_counts):
     else:
         allele_counts_by_population = pd.DataFrame(allele_counts_by_population).transpose()
 
-    print(allele_counts_by_population)
-
     # Fold allele counts so that the minor allele is counted as the alternate allele at each site.
     # I am unsure of how SFSs are constructed for polyploidal populations, so this might not work for
     # non-diploid simulations.
