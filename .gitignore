@@ -2,6 +2,7 @@
 *.out
 *.npy
 *.vcf
+*.ts
 *slurm_errors/
 *slurm_output/
 *errors_slurm/

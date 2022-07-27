@@ -9,8 +9,8 @@ dem_params:
   seq_len: !!float 1e6
   ploidy: !!int 2
 pipeline_params:
-  data_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/data_v1/
-  output_file: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/inference_output/moments_output1.txt
+  sfs_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/data_v2/sfss/
+  output_file: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/inference_output/moments_output2_moments_sfss.txt
 moments_params:
   lower_bound: [!!float 1e-4, !!float 1e-4, !!float 1e-4, !!float 1e-4]
   upper_bound: [10, 10, 10, 10]

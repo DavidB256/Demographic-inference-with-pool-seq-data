@@ -36,11 +36,7 @@ if __name__ == "__main__":
     # Use regex to extract numbers from string "sfs_file".
     sfs_name_params = re.findall(r'\d+', sfs_name)
 
-    # Create output file and write its header if it does not already exist
-    if not os.path.exists(yd["pipeline_params"]["output_file"]):
-        initialize_output_file(yd["pipeline_params"]["output_file"])
-
-    sfs = moments.Spectrum(np.load(yd["pipeline_params"]["data_dir"] + "sfss/" + sfs_name),
+    sfs = moments.Spectrum(np.load(yd["pipeline_params"]["sfs_dir"] + sfs_name),
                            mask_corners=True, pop_ids=["pop0", "pop1"])
 
     # Setup for moments
@@ -79,7 +75,7 @@ if __name__ == "__main__":
 
     # Export data
     for output in optimal_moments_output:
-        output_list.append(str(optimal_moments_output))
+        output_list.append(str(output))
     with open(yd["pipeline_params"]["output_file"], "a") as f:
         for output in output_list:
             f.write(output + "\t")

@@ -5,8 +5,8 @@
 #SBATCH --partition standard
 #SBATCH --account biol4585j-yey2sn
 #SBATCH -c 1
-#SBATCH -e /scratch/djb3ve/Demographic-inference-with-pool-seq-data/third_pipeline/errors_slurm/slurm-%a.err
-#SBATCH --output /scratch/djb3ve/Demographic-inference-with-pool-seq-data/third_pipeline/output_slurm/slurm-%a.out
+#SBATCH -e /scratch/djb3ve/Demographic-inference-with-pool-seq-data/abc_pipeline_v1/errors_slurm/slurm-%a.err
+#SBATCH --output /scratch/djb3ve/Demographic-inference-with-pool-seq-data/abc_pipeline_v1/output_slurm/slurm-%a.out
 
 options_file="/scratch/djb3ve/Demographic-inference-with-pool-seq-data/abc_pipeline_v1/instructions_for_run_abc.txt"
 script_file="/scratch/djb3ve/Demographic-inference-with-pool-seq-data/abc_pipeline_v1/run_abc.py"

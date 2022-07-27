@@ -3,7 +3,8 @@ import os
 import numpy as np
 import yaml
 import re
-import moments
+import msprime
+import tskit
 
 # Import config YAML file into global dictionary
 with open("config.yaml", "r") as f:
@@ -59,31 +60,31 @@ def add_noise_to_sfs(sfs, poolseq_depth, method):
 
 if __name__ == "__main__":
     # Handle command line arguments
-    vcf_name = sys.argv[1]
-    vcf_file = yd["pipeline_params"]["data_dir"] + "vcfs/" + sys.argv[1]
-    popinfo_file = yd["pipeline_params"]["data_dir"] + "popinfos/" + sys.argv[2]
+    ts_name = sys.argv[1]
+    ts_file = yd["pipeline_params"]["data_dir"] + "tss/" + sys.argv[1]
 
-    sample_size = int(re.findall(r'\d+', vcf_name)[0])
-    haploid_counts = [sample_size * yd["dem_params"]["ploidy"]] * 2
+    sample_size = int(re.findall(r'\d+', ts_name)[0])
 
-    # Use moments to construct SFS from VCF.
-    data_dict = moments.Misc.make_data_dict_vcf(vcf_file, popinfo_file)
-    spectrum = moments.Spectrum.from_data_dict(data_dict, pop_ids=["pop0", "pop1"],
-                                               projections=haploid_counts, polarized=False)
-    sfs = spectrum.data.astype(int)
+    # Use msprime to construct SFS from VCF.
+    ts = tskit.load(ts_file)
+    sfs = ts.allele_frequency_spectrum(sample_sets=[ts.samples()[:sample_size * yd["dem_params"]["ploidy"]],
+                                                    ts.samples()[sample_size * yd["dem_params"]["ploidy"]:]])
+    sfs *= yd["dem_params"]["seq_len"]
+    sfs = sfs.astype(int)
 
     # Serialize non-noised SFS
-    output_file = yd["pipeline_params"]["output_dir"] + "sfss/" + vcf_name[:-4] + "_depth0_pseed1"
+    output_file = yd["pipeline_params"]["output_dir"] + ts_name[:-3] + "_depth0_pseed1"
     np.save(output_file, sfs)
 
     for poolseq_depth in yd["pipeline_params"]["poolseq_depths"]:
         # Iterate once per replicate, incrementing the seed between replicates
         for seed in range(1, yd["pipeline_params"]["num_of_demography_sim_replicates"]+1):
             np.random.seed(seed)
+
             # Determine SFS
             noised_sfs = add_noise_to_sfs(sfs, poolseq_depth, yd["pipeline_params"]["rounding_method"])
             # The file extension is not included in "output_file" because "np.save" automatically adds the ".npy" extension.
-            output_file = yd["pipeline_params"]["output_dir"] + "sfss/" + vcf_name[:-4] + "_depth" + str(poolseq_depth) + "_pseed" + str(seed)
+            output_file = yd["pipeline_params"]["output_dir"] + ts_name[:-3] + "_depth" + str(poolseq_depth) + "_pseed" + str(seed)
             # Serialize SFS
             np.save(output_file, noised_sfs)
 

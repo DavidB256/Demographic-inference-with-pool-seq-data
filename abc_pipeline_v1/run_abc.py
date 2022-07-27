@@ -69,7 +69,7 @@ if __name__ == "__main__":
     sfs_name = sys.argv[1]
     # Use regex to extract numbers "sfs_name" into a list
     sfs_name_numbers = re.findall(r'\d+', sfs_name)
-    observed_sfs_file = yd["pipeline_params"]["data_dir"] + "sfss/" + sfs_name
+    observed_sfs_file = yd["pipeline_params"]["data_dir"] + sfs_name
     sample_size = int(sfs_name_numbers[0])
     obs = [np.load(observed_sfs_file)]
 
@@ -117,7 +117,7 @@ if __name__ == "__main__":
     for i in range(len(cov_mat)):
         output_list.append(str(cov_mat[i][i]))
     output_list.append(str(cov_mat_det))
-    with open(yd["pipeline_params"]["output_dir"] + yd["pipeline_params"]["output_file_name"], "a") as f:
+    with open(yd["pipeline_params"]["output_file"], "a") as f:
         for output in output_list:
             f.write(output + "\t")
         f.write("\n")
