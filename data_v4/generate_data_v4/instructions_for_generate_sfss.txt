@@ -1,0 +1,12 @@
+n10_mseed1.vcf	n10_popinfo.txt
+n10_mseed2.vcf	n10_popinfo.txt
+n10_mseed3.vcf	n10_popinfo.txt
+n50_mseed1.vcf	n50_popinfo.txt
+n50_mseed2.vcf	n50_popinfo.txt
+n50_mseed3.vcf	n50_popinfo.txt
+n100_mseed1.vcf	n100_popinfo.txt
+n100_mseed2.vcf	n100_popinfo.txt
+n100_mseed3.vcf	n100_popinfo.txt
+n200_mseed1.vcf	n200_popinfo.txt
+n200_mseed2.vcf	n200_popinfo.txt
+n200_mseed3.vcf	n200_popinfo.txt
