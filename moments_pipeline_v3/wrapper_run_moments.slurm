@@ -3,7 +3,7 @@
 #SBATCH --mem 9G
 #SBATCH --time 1-00:00:00
 #SBATCH --partition standard
-#SBATCH --account biol4585j-yey2sn
+#SBATCH --account berglandlab
 #SBATCH -c 1
 #SBATCH -e /scratch/djb3ve/Demographic-inference-with-pool-seq-data/moments_pipeline_v3/errors_slurm/slurm-%a.err
 #SBATCH --output /scratch/djb3ve/Demographic-inference-with-pool-seq-data/moments_pipeline_v3/output_slurm/slurm-%a.out

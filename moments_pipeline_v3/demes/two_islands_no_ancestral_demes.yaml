@@ -1,0 +1,17 @@
+description: Two island populations with no ancestral population and migration.
+time_units: years
+generation_time: 25
+demes:
+  - name: pop0
+    description: Island 1
+    epochs:
+    - end_time: 1e6
+      start_size: 1e5
+  - name: pop1
+    description: Island 2
+    epochs:
+    - end_time: 1e6
+      start_size: 1e5
+migrations:
+  - demes: [pop0, pop1]
+    rate: 1e-3

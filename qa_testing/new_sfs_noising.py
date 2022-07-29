@@ -14,7 +14,7 @@ def print_sfs(sfs):
     print()
 
 def add_noise_to_sfs(sfs, poolseq_depth, method="counts"):
-    haploid_counts = [i + 1 for i in sfs.shape]
+    haploid_counts = [i - 1 for i in sfs.shape]
     noised_sfs = np.zeros(sfs.shape)
     it  = np.nditer(sfs, flags=['multi_index'])
 
@@ -28,6 +28,7 @@ def add_noise_to_sfs(sfs, poolseq_depth, method="counts"):
 
             # Convert frequencies to counts via a rounding method
             if method == "counts":
+                #pooled_counts = np.multiply(pooled_freqs, haploid_counts)
                 pooled_counts = np.multiply(pooled_freqs, haploid_counts)
                 for j, freq in enumerate(pooled_counts):
                     if 0 < freq < 0.5:
@@ -44,13 +45,14 @@ def add_noise_to_sfs(sfs, poolseq_depth, method="counts"):
                     pooled_counts[j] = min(pooled_counts[j],
                                            haploid_counts[j] - pooled_counts[j])
 
-            # Mask corners
-            absent_allele_coords = [0] * sfs.ndim
-            noised_sfs[tuple(absent_allele_coords)] = 0
-            noised_sfs[tuple(haploid_counts)] = 0
-
             # Increment corresponding element
             noised_sfs[tuple(pooled_counts)] += 1
+
+        # Mask corners
+        absent_allele_coords = [0] * sfs.ndim
+        noised_sfs[tuple(absent_allele_coords)] = 0
+        noised_sfs[tuple(haploid_counts)] = 0
+
 
     return noised_sfs.astype(int)
 
@@ -75,7 +77,7 @@ def generate_sfs_from_msprime(sample_size):
     return (sfs * yd["dem_params"]["seq_len"]).astype(int)
 
 sample_size = 10
-output_file = "/scratch/djb3ve/Demographic-inference-with-pool-seq-data/qa_testing/new_sfs_noising_dists_probs.txt"
+output_file = yd["pipeline_params"]["output_file"]
 
 with open(output_file, "a") as f:
     for depth in yd["pipeline_params"]["poolseq_depths"] + [1000]:

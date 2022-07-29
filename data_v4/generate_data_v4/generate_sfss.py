@@ -5,6 +5,8 @@ import yaml
 import re
 import moments
 
+# Adapted for data_v4.
+
 # Import config YAML file into global dictionary
 with open("config.yaml", "r") as f:
     yd = yaml.safe_load(f)

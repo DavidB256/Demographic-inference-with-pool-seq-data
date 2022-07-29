@@ -11,6 +11,7 @@ dem_params:
 pipeline_params:
   sample_sizes: [10, 50, 100, 200]
   poolseq_depths: [10, 30, 50, 70, 90]
+  data_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/data_v4/
   output_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/data_v4/
   num_of_demography_sim_replicates: !!int 3
   num_of_poolseq_noising_replicates: !!int 3

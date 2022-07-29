@@ -9,3 +9,4 @@
 *output_slurm/
 core*
 inference_output/
+*popinfo.txt

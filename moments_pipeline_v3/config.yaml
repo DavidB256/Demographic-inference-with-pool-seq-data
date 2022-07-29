@@ -4,15 +4,15 @@ dem_params:
   recombination_rate: !!float 1.25e-17
   ancestral_population_size: !!float 2e5
   split_population_size: !!float 1e5
-  t_split: !!float 1e3
-  mig_rate: !!float 1e-5
+  t_split: !!float 1e6
+  mig_rate: !!float 0
   seq_len: !!float 1e6
   ploidy: !!int 2
 pipeline_params:
-  sfs_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/data_v2/sfss/
-  output_file: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/inference_output/moments_output2_moments_sfss.txt
+  sfs_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/data_v4/sfss/
+  output_file: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/inference_output/moments_output3_no_mig.txt
 moments_params:
-  lower_bound: [!!float 1e-4, !!float 1e-4, !!float 1e-4, !!float 1e-4]
-  upper_bound: [10, 10, 10, 10]
+  lower_bound: [!!float 1e-4, !!float 1e-4, !!float 1e-4, !!float 1e-5]
+  upper_bound: [10, 10, 10, !!float 1e-5]
   max_iter: 100
-  num_of_inference_repeats: 5
+  num_of_inference_repeats: 3

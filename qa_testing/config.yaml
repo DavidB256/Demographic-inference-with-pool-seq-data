@@ -12,11 +12,10 @@ pipeline_params:
   poolseq_depths: [10, 30, 50, 70, 90]
   sample_sizes: [10, 50, 100, 200, 500]
   data_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/data/
-  output_dir: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/abc_pipeline_v1/output/
-  output_file_name: abc_output2_steps6_bounds4.txt
+  output_file: /scratch/djb3ve/Demographic-inference-with-pool-seq-data/qa_testing/probs2.txt
   num_of_demography_sim_replicates: !!int 5
   num_of_poolseq_noising_replicates: !!int 5
-  rounding_method: counts
+  rounding_method: probs
   ignore_multiallelic_site: !!bool False
 abc_params:
   steps: !!int 6
